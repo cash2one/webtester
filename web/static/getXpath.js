@@ -6,8 +6,7 @@ btn.onclick = function(){
 
 var iframePage = document.getElementById('iframePage');
 iframePage.onload = function(){
-  var xpath = document.getElementById('xpath');
-  xpath.innerHTML = 'Xpath is shown in here';
+  var xpath = document.getElementById('xpathInput');
   var contents = $("#iframePage").contents();
   var elements = contents[0].all;
   for(var i = 0; i < elements.length; i++){
