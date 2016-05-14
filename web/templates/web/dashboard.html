@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+
+    <title>浏览器兼容性自动化测试平台</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding-top: 70px;
+        }
+
+        #iframePage{
+            width: 100%;
+            height: 600px;
+        }
+
+    </style>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">浏览器兼容性自动化测试平台</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">添加通用测试</a></li>
+                <li><a href="#">登录测试</a></li>
+                <li><a href="#">分辨率适配</a></li>
+                <li><a href="#">浏览器大小适配</a></li>
+                <li><a href="#about">查看报告</a></li>
+                <li><a href="#contact">使用说明</a></li>
+                {#                <li class="dropdown">#}
+                {#                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"#}
+                {#                       aria-expanded="false">测试模板<span class="caret"></span></a>#}
+                {#                    <ul class="dropdown-menu">#}
+                {#                        <li><a href="#">登录</a></li>#}
+                {#                        <li><a href="#">分辨率适配</a></li>#}
+                {#                        <li><a href="#">浏览器大小适配</a></li>#}
+                {#                        <li role="separator" class="divider"></li>#}
+                {#                        <li class="dropdown-header">Nav header</li>#}
+                {#                        <li><a href="#">Separated link</a></li>#}
+                {#                        <li><a href="#">One more separated link</a></li>#}
+                {#                    </ul>#}
+                {#                </li>#}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/admin">Admin</a></li>
+                <li><a href="../navbar-static-top/"></a></li>
+                <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="col-lg-6">
+            <div class="row-lg-4">
+                <span class="label label-primary">URL</span>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Input URL to load page" id="urlInput">
+                    <span class="input-group-btn"><button class="btn btn-default" type="button" id = "urlBtn">Go!</button></span>
+                </div><!-- /input-group -->
+            </div>
+            <div class="row-lg-4">
+                <span class="label label-primary">Cookie</span>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Input Cookie String" id="urlInput">
+                    <span class="input-group-btn"><button class="btn btn-default" type="button" id = "urlBtn">OK!</button></span>
+                </div><!-- /input-group -->
+            </div>
+            <div class="row-lg-4" style="min-height: 600px">
+                <span class="label label-primary">Page</span>
+                <iframe id="iframePage" src=""></iframe>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <span class="label label-primary">增加Actioin</span>
+            <div class="row">
+                <div class="row-lg-6">
+                    <div class="col-lg-8">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Xpath</span>
+                        <input type="text" class="form-control" placeholder="Click in frame then edit if need" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default">Action Type</button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Clera</a></li>
+                            <li><a href="#">Click</a></li>
+                            <li><a href="#">Input</a></li>
+                        </ul>
+                    </div>
+                </div>
+                </div>
+                <div class="row-lg-6">
+                    <div class="col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Data Input</span>
+                            <input type="text" class="form-control" placeholder="Data you want sentkey" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-md btn-primary btn-block">Add to action list</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span class="label label-primary">增加Check</span>
+            <div class="row">
+                <div class="row-lg-6">
+                    <div class="col-lg-8">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Xpath</span>
+                        <input type="text" class="form-control" placeholder="Click in frame then edit if need" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default">Check Type</button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Url</a></li>
+                            <li><a href="#">Text</a></li>
+                            <li><a href="#">PrintScreen</a></li>
+                        </ul>
+                    </div>
+                </div>
+                </div>
+                <div class="row-lg-6">
+                    <div class="col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Ext Data</span>
+                            <input type="text" class="form-control" placeholder="URL or Text excepted" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-md btn-primary btn-block">Add to check list</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span class="label label-primary">用例基本信息</span>
+            <div class="row">
+                <div class="row-lg-6">
+                    <div class="col-lg-8">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Xpath</span>
+                        <input type="text" class="form-control" placeholder="Click in frame then edit if need" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default">Action Type</button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Clera</a></li>
+                            <li><a href="#">Click</a></li>
+                            <li><a href="#">Input</a></li>
+                        </ul>
+                    </div>
+                </div>
+                </div>
+                <div class="row-lg-6">
+                    <div class="col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Data Input</span>
+                            <input type="text" class="form-control" placeholder="Data you want sentkey" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-md btn-primary btn-block">Add to action list</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-lg-3">
+                <span class="label label-primary">用例列表</span>
+{#                <label for="caseList">用例列表</label>#}
+                <div class="list-group" id="caseList">
+                  <div href="#" class="list-group-item">
+                    <h4 class="list-group-item-heading">List group item heading</h4>
+                    <p class="list-group-item-text">...</p>
+                  </div>
+                    <div href="#" class="list-group-item">
+                    <h4 class="list-group-item-heading">List group item heading</h4>
+                    <p class="list-group-item-text">...</p>
+                  </div>
+                </div>
+            </div>
+            <div class="row-lg-3">
+                <span class="label label-primary">当前用例Action列表</span>
+{#                <label for="caseList">用例列表</label>#}
+                <div class="list-group" id="caseList">
+                  <div href="#" class="list-group-item">
+                    <h4 class="list-group-item-heading">List group item heading</h4>
+                    <p class="list-group-item-text">...</p>
+                  </div>
+                    <div href="#" class="list-group-item">
+                    <h4 class="list-group-item-heading">List group item heading</h4>
+                    <p class="list-group-item-text">...</p>
+                  </div>
+                </div>
+            </div>
+            <div class="row-lg-3">
+                <span class="label label-primary">当前用Check列表</span>
+{#                <label for="caseList">用例列表</label>#}
+                <div class="list-group" id="caseList">
+                  <div href="#" class="list-group-item">
+                    <h4 class="list-group-item-heading">List group item heading</h4>
+                    <p class="list-group-item-text">...</p>
+                  </div>
+                    <div href="#" class="list-group-item">
+                    <h4 class="list-group-item-heading">List group item heading</h4>
+                    <p class="list-group-item-text">...</p>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/getXpath.js"></script>
+</body>
+</html>
