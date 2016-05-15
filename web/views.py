@@ -47,3 +47,8 @@ def login_view(request):
 def dashboard(request):
     template = loader.get_template('web/dashboard.html')
     return HttpResponse(template.render())
+
+
+def test(request):
+    template = loader.get_template('web/test.html')
+    return HttpResponse(template.render())

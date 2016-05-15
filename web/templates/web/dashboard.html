@@ -19,18 +19,29 @@
             padding-top: 70px;
         }
 
-        #iframePage{
+        #iframePage {
             width: 100%;
             height: 600px;
         }
 
-    </style>
+        .input-group {
+            margin-bottom: 3px;
+        }
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+        span.label.label-primary {
+            margin-top: 6px;
+        }
+
+        .table td {
+            text-align: center;
+        }
+    </style>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
+    <link href="/static/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -73,14 +84,15 @@
                 <span class="label label-primary">URL</span>
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Input URL to load page" id="urlInput">
-                    <span class="input-group-btn"><button class="btn btn-default" type="button" id = "urlBtn">Go!</button></span>
+                    <span class="input-group-btn"><button class="btn btn-default" type="button" id="urlBtn">Go!</button></span>
                 </div><!-- /input-group -->
             </div>
             <div class="row-lg-4">
                 <span class="label label-primary">Cookie</span>
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Input Cookie String" id="urlInput">
-                    <span class="input-group-btn"><button class="btn btn-default" type="button" id = "urlBtn">OK!</button></span>
+                    <input type="text" class="form-control" placeholder="Input Cookie String" id="cookieInput">
+                    <span class="input-group-btn"><button class="btn btn-default" type="button"
+                                                          id="cookieBtn">OK!</button></span>
                 </div><!-- /input-group -->
             </div>
             <div class="row-lg-4" style="min-height: 600px">
@@ -94,36 +106,37 @@
             <div class="row">
                 <div class="row-lg-6">
                     <div class="col-lg-8">
-                    <div class="input-group">
-                        <span class="input-group-addon">Xpath</span>
-                        <input type="text" class="form-control" placeholder="Click in frame then edit if need" id="xpathInput">
+                        <div class="input-group">
+                            <span class="input-group-addon">Xpath</span>
+                            <input type="text" class="form-control" placeholder="Click in frame then edit if need"
+                                   id="actionXpathInput">
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default">Action Type</button>
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Clera</a></li>
-                            <li><a href="#">Click</a></li>
-                            <li><a href="#">Input</a></li>
-                        </ul>
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">Type</span>
+                            <select class="selectpicker" id="actionTypeSelect">
+                                <option value="clear">clear</option>
+                                <option value="click">click</option>
+                                <option value="sentkey">sentkey</option>
+                            </select>
+                        </div>
+
                     </div>
-                </div>
                 </div>
                 <div class="row-lg-6">
                     <div class="col-lg-8">
                         <div class="input-group">
                             <span class="input-group-addon">Data Input</span>
-                            <input type="text" class="form-control" placeholder="Data you want sentkey" >
+                            <input type="text" class="form-control" placeholder="Data you want sentkey"
+                                   id="actionDataInput">
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-md btn-primary btn-block">Add to action list</button>
+                            <button type="button" class="btn btn-md btn-primary btn-block" id="addActionBtn">Add to
+                                action list
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -132,119 +145,155 @@
             <div class="row">
                 <div class="row-lg-6">
                     <div class="col-lg-8">
-                    <div class="input-group">
-                        <span class="input-group-addon" >Xpath</span>
-                        <input type="text" class="form-control" placeholder="Click in frame then edit if need" >
+                        <div class="input-group">
+                            <span class="input-group-addon">Xpath</span>
+                            <input type="text" class="form-control" placeholder="Click in frame then edit if need"
+                                   id="checkXpathInput">
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default">Check Type</button>
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Url</a></li>
-                            <li><a href="#">Text</a></li>
-                            <li><a href="#">PrintScreen</a></li>
-                        </ul>
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">Type</span>
+                            <select class="selectpicker" id="checkTypeSelect">
+                                <option value="expectedText">expectedText</option>
+                                <option value="expectedUrl">expectedUrl</option>
+                                <option value="printScreen">printScreen</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
                 </div>
                 <div class="row-lg-6">
                     <div class="col-lg-8">
                         <div class="input-group">
                             <span class="input-group-addon">Ext Data</span>
-                            <input type="text" class="form-control" placeholder="URL or Text excepted" >
+                            <input type="text" class="form-control" placeholder="URL or Text excepted"
+                                   id="checkDataInput">
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-md btn-primary btn-block">Add to check list</button>
+                            <button type="button" class="btn btn-md btn-primary btn-block" id="addCheckBtn">Add to check
+                                list
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
             <span class="label label-primary">用例基本信息</span>
             <div class="row">
-                <div class="row-lg-6">
-                    <div class="col-lg-8">
-                    <div class="input-group">
-                        <span class="input-group-addon">Xpath</span>
-                        <input type="text" class="form-control" placeholder="Click in frame then edit if need" >
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default">Action Type</button>
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Clera</a></li>
-                            <li><a href="#">Click</a></li>
-                            <li><a href="#">Input</a></li>
-                        </ul>
-                    </div>
-                </div>
-                </div>
-                <div class="row-lg-6">
-                    <div class="col-lg-8">
+                <div class="row-lg-4">
+                    <div class="col-lg-6">
                         <div class="input-group">
-                            <span class="input-group-addon">Data Input</span>
-                            <input type="text" class="form-control" placeholder="Data you want sentkey" >
+                            <span class="input-group-addon">Name</span>
+                            <input type="text" class="form-control" placeholder="Case Name" id="caseNameInput">
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-md btn-primary btn-block">Add to action list</button>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">Browsers</span>
+                            <select class="selectpicker" multiple id="browsersSelect">
+                                <option selected value="chrome">Chrome</option>
+                                <option selected value="firefox">Firefox</option>
+                                <option selected value="opera">Opera</option>
+                                <option selected value="ie">IE</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-lg-4">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">BrowserHighWidth</span>
+                            <select class="selectpicker" multiple data-selected-text-format="count > 2"
+                                    id="browserHighWidthSelect">
+                                <option value="800x600">800x600</option>
+                                <option value="1024x768">1024x768</option>
+                                <option value="1366x768" selected>1366x768</option>
+                                <option value="1280x720">1280x720</option>
+                                <option value="1920x1080">1920x1080</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">ScreenResolution</span>
+                            <select class="selectpicker" multiple data-selected-text-format="count > 2"
+                                    id="screenResolutionSelect">
+                                <option value="800x600">800x600</option>
+                                <option value="1024x768">1024x768</option>
+                                <option value="1366x768" selected>1366x768</option>
+                                <option value="1280x720">1280x720</option>
+                                <option value="1920x1080">1920x1080</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-lg-4">
+                    <div class="col-lg-12">
+                        <div class="btn-group" style="width: 100%">
+                            <button type="button" class="btn btn-md btn-primary btn-block" style="width: 100%"
+                                    id="addCaseBtn">Add to
+                                case list
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row-lg-3">
-                <span class="label label-primary">用例列表</span>
-{#                <label for="caseList">用例列表</label>#}
-                <div class="list-group" id="caseList">
-                  <div href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">...</p>
-                  </div>
-                    <div href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">...</p>
-                  </div>
-                </div>
+            <span class="label label-primary">用例列表</span>
+            <div class="row">
+                <table class="table table-bordered table-striped" id="caseList">
+                    <col width="45%"/>
+                    <col width="45%"/>
+                    <col width="10%"/>
+                    <thead>
+                    <tr>
+                        <th data-field="name">Name</th>
+                        <th data-field="url">Url</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
-            <div class="row-lg-3">
-                <span class="label label-primary">当前用例Action列表</span>
-{#                <label for="caseList">用例列表</label>#}
-                <div class="list-group" id="caseList">
-                  <div href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">...</p>
-                  </div>
-                    <div href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">...</p>
-                  </div>
-                </div>
+
+            <span class="label label-primary">当前用例Action列表</span>
+            <div class="row">
+                <table class="table table-bordered table-striped" id="actionList">
+                    <col width="30%"/>
+                    <col width="30%"/>
+                    <col width="30%"/>
+                    <col width="10%"/>
+                    <thead>
+                    <tr>
+                        <th>Xpath</th>
+                        <th>Type</th>
+                        <th>Data</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
-            <div class="row-lg-3">
-                <span class="label label-primary">当前用Check列表</span>
-{#                <label for="caseList">用例列表</label>#}
-                <div class="list-group" id="caseList">
-                  <div href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">...</p>
-                  </div>
-                    <div href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">...</p>
-                  </div>
-                </div>
+            <span class="label label-primary">当前用Check列表</span>
+            <div class="row">
+                <table class="table table-bordered table-striped" id="checkList">
+                    <col width="30%"/>
+                    <col width="30%"/>
+                    <col width="30%"/>
+                    <col width="10%"/>
+                    <thead>
+                    <tr>
+                        <th>Xpath</th>
+                        <th>Type</th>
+                        <th>Data</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -255,8 +304,18 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
-<script src="/static/getXpath.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
+
+<!-- Latest compiled and minified Locales -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/locale/bootstrap-table-zh-CN.min.js"></script>
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/i18n/defaults-*.min.js"></script>#}
+<script src="/static/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<script src="/static/dashboard.js"></script>
 </body>
 </html>

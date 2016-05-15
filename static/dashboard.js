@@ -1,0 +1,369 @@
+var urlBtn = $('#urlBtn');
+var cookieBtn = $('#cookieBtn');
+var addActionBtn = $('#addActionBtn');
+var addCheckBtn = $('#addCheckBtn');
+var addCaseBtn = $('#addCaseBtn');
+
+var urlInput = $('#urlInput');
+var cookieInput = $('#cookieInput');
+var actionXpathInput = $('#actionXpathInput');
+var actionDataInput = $('#actionDataInput');
+var checkXpathInput = $('#checkXpathInput');
+var checkDataInput = $('#checkDataInput');
+var caseNameInput = $('#caseNameInput');
+
+var actionTypeSelect = $('#actionTypeSelect');
+var checkTypeSelect = $('#checkTypeSelect');
+var screenResolutionSelect = $('#screenResolutionSelect');
+var browserHighWidthSelect = $('#browserHighWidthSelect');
+var browsersSelect = $('#browsersSelect');
+
+var caseTable = document.getElementById('caseList').getElementsByTagName('tbody')[0];
+var actionTable = document.getElementById('actionList').getElementsByTagName('tbody')[0];
+var checkTable = document.getElementById('checkList').getElementsByTagName('tbody')[0];
+
+var iframePage = $('#iframePage');
+
+var xpathInput = actionXpathInput;
+
+var caseList = [];
+var currentCase = {};
+var actionList = [];
+var checkList = [];
+var currentAction = {};
+var currentCheck = {};
+
+var url = undefined;
+var cookieString = undefined;
+
+cookieBtn.click(function () {
+    cookieString = cookieInput.val()
+});
+
+urlBtn.click(function () {
+    var url = urlInput.val();
+    iframePage.attr('src', url);
+});
+
+actionXpathInput.click(
+    function () {
+        xpathInput=actionXpathInput;
+    }
+);
+
+checkXpathInput.click(
+    function () {
+        xpathInput=checkXpathInput;
+    }
+);
+
+addActionBtn.click(function () {
+    currentAction.xpath = actionXpathInput.val();
+    currentAction.actionType = actionTypeSelect.val();
+    if (currentAction.actionType == "sentkey") {
+        currentAction.input = actionDataInput.val();
+    }
+    actionList.push(currentAction);
+    currentAction = {};
+    console.log(JSON.stringify(actionList));
+});
+
+addCheckBtn.click(function () {
+    currentCheck.xpath = checkXpathInput.val();
+    currentCheck.checkType = checkTypeSelect.val();
+    if (currentCheck.checkType == 'expectedText') {
+        currentCheck.text = checkDataInput.val();
+    } else if (currentCheck.checkType == 'expectedUrl') {
+        currentCheck.url = checkDataInput.val();
+    }
+    checkList.push(currentCheck);
+    currentCheck = {};
+    console.log(JSON.stringify(checkList));
+});
+
+addCaseBtn.click(function () {
+    var name = caseNameInput.val();
+    url = urlInput.val();
+    currentCase.url = url;
+    currentCase.name = name;
+    currentCase.browserHighWidth = browserHighWidthSelect.val();
+    currentCase.browserWindowPosition = screenResolutionSelect.val();
+    currentCase.browsers = browsersSelect.val();
+    currentCase.actionList = actionList;
+    currentCase.checkList = checkList;
+    caseList.push(currentCase);
+    var newRow = caseTable.insertRow(caseTable.rows.length);
+    var nameCell = newRow.insertCell(0);
+    var aNode = $('<a>');
+    aNode.text(currentCase.name);
+    $(nameCell).append(aNode);
+    $(aNode).editable(
+        {
+            type: 'text',
+            title: 'Enter Case Name',
+            success: function (response, newValue) {
+                var index = $(this).parent().closest('tr').index();
+                var myCase = caseList[index];
+                myCase.name = newValue;
+                caseList[index] = myCase;
+            }
+        }
+    );
+
+    var urlCell = newRow.insertCell(1);
+    var aNode = $('<a>');
+    aNode.text(currentCase.url);
+    $(urlCell).append(aNode);
+    $(aNode).editable(
+        {
+            type: 'text',
+            title: 'Enter Case Url',
+            success: function (response, newValue) {
+                var index = $(this).parent().closest('tr').index();
+                var myCase = caseList[index];
+                myCase.url = newValue;
+                caseList[index] = myCase;
+            }
+        }
+    );
+
+    var deleteBtnCell = newRow.insertCell(2);
+    var deleteBtn = $('<button>');
+    deleteBtn.text('delete').attr('class', 'btn btn-danger btn-sm');
+    deleteBtn.click(
+        function () {
+            var index = $(this).parent().closest('tr').index();
+            caseList.splice(index, 1);
+            caseTable.deleteRow(index);
+        }
+    );
+    $(deleteBtnCell).append(deleteBtn);
+
+    console.log(JSON.stringify(caseList));
+    actionList = [];
+    checkList = [];
+    currentCase = {};
+});
+
+addActionBtn.click(
+    function () {
+        currentAction.xpath = actionXpathInput.val();
+        currentAction.actionType = actionTypeSelect.val();
+        currentAction.input = actionDataInput.val();
+        actionList.push(currentAction);
+
+        var newRow = actionTable.insertRow(caseTable.rows.length);
+        var xpathCell = newRow.insertCell(0);
+        var aNode = $('<a>');
+        aNode.text(currentAction.xpath);
+        $(xpathCell).append(aNode);
+        $(aNode).editable(
+            {
+                type: 'text',
+                title: 'Enter Xpath',
+                success: function (response, newValue) {
+                    var index = $(this).parent().closest('tr').index();
+                    var myCase = actionList[index];
+                    myCase.xpath = newValue;
+                    actionList[index] = myCase;
+                }
+            }
+        );
+
+        var typeCell = newRow.insertCell(1);
+        var aNode = $('<a>');
+        aNode.text(currentAction.actionType);
+        $(typeCell).append(aNode);
+        $(aNode).editable(
+            {
+                type: 'select',
+                title: 'Select Type',
+                source: [
+                    {
+                        value: 'clear',
+                        text: 'clear'
+                    },
+                    {
+                        value: 'click',
+                        text: 'click'
+                    },
+                    {
+                        value: 'sentkey',
+                        text: 'sentkey'
+                    }
+                ],
+                success: function (response, newValue) {
+                    var index = $(this).parent().closest('tr').index();
+                    var myCase = actionList[index];
+                    myCase.actionType = newValue;
+                    actionList[index] = myCase;
+                }
+            }
+        );
+
+        var inputCell = newRow.insertCell(2);
+        var aNode = $('<a>');
+        aNode.text(currentAction.input);
+        $(inputCell).append(aNode);
+        $(aNode).editable(
+            {
+                type: 'text',
+                title: 'Enter Input',
+                success: function (response, newValue) {
+                    var index = $(this).parent().closest('tr').index();
+                    var myCase = actionList[index];
+                    myCase.input = newValue;
+                    actionList[index] = myCase;
+                }
+            }
+        );
+
+        var deleteBtnCell = newRow.insertCell(3);
+        var deleteBtn = $('<button>');
+        deleteBtn.text('delete').attr('class', 'btn btn-danger btn-sm');
+        deleteBtn.click(
+            function () {
+                var index = $(this).parent().closest('tr').index();
+                actionList.splice(index, 1);
+                actionTable.deleteRow(index);
+            }
+        );
+        $(deleteBtnCell).append(deleteBtn);
+
+        currentAction = {};
+    }
+);
+
+addCheckBtn.click(
+    function () {
+        currentCheck.xpath = checkXpathInput.val();
+        currentCheck.checkType = checkTypeSelect.val();
+        currentCheck.input = checkDataInput.val();
+        checkList.push(currentCheck);
+
+        var newRow = checkTable.insertRow(caseTable.rows.length);
+        var xpathCell = newRow.insertCell(0);
+        var aNode = $('<a>');
+        aNode.text(currentCheck.xpath);
+        $(xpathCell).append(aNode);
+        $(aNode).editable(
+            {
+                type: 'text',
+                title: 'Enter Xpath',
+                success: function (response, newValue) {
+                    var index = $(this).parent().closest('tr').index();
+                    var myCase = actionList[index];
+                    myCase.xpath = newValue;
+                    checkList[index] = myCase;
+                }
+            }
+        );
+
+        var typeCell = newRow.insertCell(1);
+        var aNode = $('<a>');
+        aNode.text(currentCheck.checkType);
+        $(typeCell).append(aNode);
+        $(aNode).editable(
+            {
+                type: 'select',
+                title: 'Select Type',
+                source: [
+
+                    {
+                        value: 'expectedText',
+                        text: 'expectedText'
+                    },
+                    {
+                        value: 'expectedUrl',
+                        text: 'expectedUrl'
+                    },
+                    {
+                        value: 'printScreen',
+                        text: 'printScreen'
+                    }
+                ],
+                success: function (response, newValue) {
+                    var index = $(this).parent().closest('tr').index();
+                    var myCase = checkList[index];
+                    myCase.checkType = newValue;
+                    checkList[index] = myCase;
+                }
+            }
+        );
+
+        var inputCell = newRow.insertCell(2);
+        var aNode = $('<a>');
+        aNode.text(currentCheck.input);
+        $(inputCell).append(aNode);
+        $(aNode).editable(
+            {
+                type: 'text',
+                title: 'Enter Input',
+                success: function (response, newValue) {
+                    var index = $(this).parent().closest('tr').index();
+                    var myCase = actionList[index];
+                    myCase.input = newValue;
+                    checkList[index] = myCase;
+                }
+            }
+        );
+
+        var deleteBtnCell = newRow.insertCell(3);
+        var deleteBtn = $('<button>');
+        deleteBtn.text('delete').attr('class', 'btn btn-danger btn-sm');
+        deleteBtn.click(
+            function () {
+                var index = $(this).parent().closest('tr').index();
+                checkList.splice(index, 1);
+                checkTable.deleteRow(index);
+            }
+        );
+        $(deleteBtnCell).append(deleteBtn);
+
+    }
+);
+
+iframePage.load(
+    function () {
+        var contents = iframePage.contents();
+        var elements = contents[0].all;
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].onclick = function (event) {
+                event.preventDefault();// 取消事件的默认行为
+                event.stopPropagation(); // 阻止事件的传播
+                var xpathString = createXPathFromElement(this);
+                xpathInput.val(xpathString);
+            }
+        }
+    }
+);
+
+function createXPathFromElement(elm) {
+    var allNodes = document.getElementsByTagName('*');
+    for (var segs = []; elm && elm.nodeType == 1; elm = elm.parentNode) {
+        if (elm.hasAttribute('id')) {
+            var uniqueIdCount = 0;
+            for (var n = 0; n < allNodes.length; n++) {
+                if (allNodes[n].hasAttribute('id') && allNodes[n].id == elm.id) uniqueIdCount++;
+                if (uniqueIdCount > 1) break;
+            }
+            if (uniqueIdCount == 1) {
+                segs.unshift('id("' + elm.getAttribute('id') + '")');
+                return segs.join('/');
+            } else {
+                segs.unshift(elm.localName.toLowerCase() + '[@id="' + elm.getAttribute('id') + '"]');
+            }
+        } else if (elm.hasAttribute('class')) {
+            segs.unshift(elm.localName.toLowerCase() + '[@class="' + elm.getAttribute('class') + '"]');
+        } else {
+            for (i = 1, sib = elm.previousSibling; sib; sib = sib.previousSibling) {
+                if (sib.localName == elm.localName)  i++;
+            }
+            ;
+            segs.unshift(elm.localName.toLowerCase() + '[' + i + ']');
+        }
+        ;
+    }
+    ;
+    return segs.length ? '/' + segs.join('/') : null;
+};

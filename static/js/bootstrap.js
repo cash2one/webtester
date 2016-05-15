@@ -282,12 +282,12 @@ if (typeof jQuery === 'undefined') {
   $(document)
     .on('click.bs.button.data-api', '[data-toggle^="button"]', function (e) {
       var $btn = $(e.target)
-      if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn')
+      if (!$btn.hasClass('urlBtn')) $btn = $btn.closest('.urlBtn')
       Plugin.call($btn, 'toggle')
       if (!($(e.target).is('input[type="radio"]') || $(e.target).is('input[type="checkbox"]'))) e.preventDefault()
     })
     .on('focus.bs.button.data-api blur.bs.button.data-api', '[data-toggle^="button"]', function (e) {
-      $(e.target).closest('.btn').toggleClass('focus', /^focus(in)?$/.test(e.type))
+      $(e.target).closest('.urlBtn').toggleClass('focus', /^focus(in)?$/.test(e.type))
     })
 
 }(jQuery);
