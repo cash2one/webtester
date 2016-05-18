@@ -181,7 +181,7 @@
             </div>
             <span class="label label-primary">用例基本信息</span>
             <div class="row">
-                <div class="row-lg-4">
+                <div class="row-lg-3">
                     <div class="col-lg-6">
                         <div class="input-group">
                             <span class="input-group-addon">Name</span>
@@ -200,11 +200,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="row-lg-4">
+                <div class="row-lg-3">
                     <div class="col-lg-6">
                         <div class="input-group">
                             <span class="input-group-addon">BrowserHighWidth</span>
-                            <select class="selectpicker" multiple data-selected-text-format="count > 2"
+                            <select class="selectpicker"
                                     id="browserHighWidthSelect">
                                 <option value="800x600">800x600</option>
                                 <option value="1024x768">1024x768</option>
@@ -217,7 +217,7 @@
                     <div class="col-lg-6">
                         <div class="input-group">
                             <span class="input-group-addon">ScreenResolution</span>
-                            <select class="selectpicker" multiple data-selected-text-format="count > 2"
+                            <select class="selectpicker"
                                     id="screenResolutionSelect">
                                 <option value="800x600">800x600</option>
                                 <option value="1024x768">1024x768</option>
@@ -228,7 +228,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="row-lg-4">
+                <div class="row-lg-3">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">WindowScrollX</span>
+                            <input type="text" class="form-control" placeholder="X" id="windowScrollXInput" value="0">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">WindowScrollY</span>
+                            <input type="text" class="form-control" placeholder="Y" id="windowScrollYInput" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="row-lg-3">
                     <div class="col-lg-12">
                         <div class="btn-group" style="width: 100%">
                             <button type="button" class="btn btn-md btn-primary btn-block" style="width: 100%"
@@ -294,6 +308,17 @@
                     <tbody>
                     </tbody>
                 </table>
+            </div>
+            <div class="row">
+                <div class="col-lg-12" id="submitMsg">
+                </div>
+                <div class="col-lg-12">
+                    <div class="btn-group" style="width: 100%">
+                        <button type="button" class="btn btn-md btn-primary btn-block" style="width: 100%"
+                                id="submitBtn">Submit test post
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

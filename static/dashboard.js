@@ -3,6 +3,7 @@ var cookieBtn = $('#cookieBtn');
 var addActionBtn = $('#addActionBtn');
 var addCheckBtn = $('#addCheckBtn');
 var addCaseBtn = $('#addCaseBtn');
+var submitBtn = $('#submitBtn');
 
 var urlInput = $('#urlInput');
 var cookieInput = $('#cookieInput');
@@ -11,6 +12,8 @@ var actionDataInput = $('#actionDataInput');
 var checkXpathInput = $('#checkXpathInput');
 var checkDataInput = $('#checkDataInput');
 var caseNameInput = $('#caseNameInput');
+var windowScrollXInput=$('#windowScrollXInput');
+var windowScrollYInput=$('#windowScrollYInput');
 
 var actionTypeSelect = $('#actionTypeSelect');
 var checkTypeSelect = $('#checkTypeSelect');
@@ -47,13 +50,13 @@ urlBtn.click(function () {
 
 actionXpathInput.click(
     function () {
-        xpathInput=actionXpathInput;
+        xpathInput = actionXpathInput;
     }
 );
 
 checkXpathInput.click(
     function () {
-        xpathInput=checkXpathInput;
+        xpathInput = checkXpathInput;
     }
 );
 
@@ -86,8 +89,9 @@ addCaseBtn.click(function () {
     url = urlInput.val();
     currentCase.url = url;
     currentCase.name = name;
-    currentCase.browserHighWidth = browserHighWidthSelect.val();
-    currentCase.browserWindowPosition = screenResolutionSelect.val();
+    currentCase.browserWindowSize = formatResolution(browserHighWidthSelect.val());
+    currentCase.browserWindowPosition = formatResolution(screenResolutionSelect.val());
+    currentCase.browserScrollPosition={x:windowScrollXInput.val(),y:windowScrollYInput.val()};
     currentCase.browsers = browsersSelect.val();
     currentCase.actionList = actionList;
     currentCase.checkList = checkList;
@@ -323,6 +327,25 @@ addCheckBtn.click(
     }
 );
 
+submitBtn.click(
+    function () {
+        $.post('/add_post',
+            {test_post:{caseList: caseList}},
+            function (data) {
+                if (data.errno == 0) {
+                    $('#submitMsg').append(makeAlertDom(data.msg, "alert alert-success"));
+                } else {
+                    $('#submitMsg').append(makeAlertDom(data.msg, "alert alert-danger"));
+                }
+            }
+        ).error(
+            function () {
+                $('#submitMsg').append(makeAlertDom("post error", "alert alert-danger"));
+            }
+        );
+    }
+);
+
 iframePage.load(
     function () {
         var contents = iframePage.contents();
@@ -337,6 +360,14 @@ iframePage.load(
         }
     }
 );
+
+function makeAlertDom(text, msgClass) {
+    var msg = $('<div>');
+    msg.attr('class', msgClass);
+    msg.attr('role', 'alert');
+    msg.text(text);
+    return msg;
+}
 
 function createXPathFromElement(elm) {
     var allNodes = document.getElementsByTagName('*');
@@ -367,3 +398,8 @@ function createXPathFromElement(elm) {
     ;
     return segs.length ? '/' + segs.join('/') : null;
 };
+
+function formatResolution(resolution){
+    var widthHigh=resolution.split('x');
+    return {width:widthHigh[0],high:widthHigh[1]};
+}
