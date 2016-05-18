@@ -8,6 +8,11 @@ class Case(models.Model):
     url = models.CharField(max_length=1024)
     repeat_time = models.IntegerField(default=1)
     check_wait_time = models.IntegerField(default=1)
+    browsers = models.CharField(max_length=128)
+    browser_window_size = models.CharField(max_length=128)
+    browser_window_position = models.CharField(max_length=128)
+    browser_scroll_position = models.CharField(max_length=128)
+    ext=models.TextField(max_length=1024)
 
     def __unicode__(self):
         return "%d:%s" % (self.id, self.name)

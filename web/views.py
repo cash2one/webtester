@@ -8,7 +8,9 @@ from django.shortcuts import render_to_response
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from webtester.testertask import test_testpost
-from webtester.testertask import test_post as test_post_print
+import time
+
+import json
 from celery import Celery
 from django.views.decorators.csrf import csrf_exempt
 
@@ -57,15 +59,20 @@ def dashboard(request):
 
 @csrf_exempt
 def add_test_post(request):
-    test_post = request.POST['test_post']
-    test_post_print.delay(test_post)
     if request.method == 'GET':
         return JsonResponse({'errno': 3, 'msg': 'only support post'})
     if request.user.is_authenticated():
-        test_post = request.POST['test_post']
-        if test_post is None:
+        test_post_data = request.POST['test_post']
+        if test_post_data is None:
             return JsonResponse({'errno': 2, 'msg': 'test_post needed'})
-        test_post_print.delay(test_post)
+        __save_testpost(test_post_data)
+        test_testpost.delay(test_post_data,request)
         return JsonResponse({'errno': 0, 'msg': 'test_post add to queue success'})
     else:
         return JsonResponse({'errno': 1, 'msg': 'this api need to be authed'})
+
+
+def __save_testpost(testpost,request):
+    test_post_data=json.loads(testpost,'utf8')
+    name=test_post_data.get('name','%d:%s' %(request.user.id,str(time.time())))
+

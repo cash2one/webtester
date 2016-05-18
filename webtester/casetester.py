@@ -11,6 +11,10 @@ from random import Random
 class CaseTester:
     def __init__(self):
         self.case_json = None
+        self.report = None;
+
+    # def __init__(self, case_json):
+    #     self.case_json = case_json
 
     def __parse_case_file(self):
         self.name = self.case_json['name']
@@ -66,7 +70,7 @@ class CaseTester:
         for check in self.check_list:
             check_type = check['checkType']
             if check_type == 'expectedUrl':
-                expected_url = check['url']
+                expected_url = check['checkData']
                 real_url = self.driver.current_url
                 print('expectedUrl:\t' + expected_url)
                 print('currentUrl:\t' + real_url)
@@ -90,13 +94,13 @@ class CaseTester:
             elif check_type == 'expectedText':
                 xpath = check['xpath']
                 current_text = self.driver.find_element_by_xpath(xpath).text
-                expected_text = check['text']
-                print ('expectedText:\t' + expected_text)
-                print ('currentText:\t' + current_text)
+                expected_text = check['checkData']
+                print('expectedText:\t' + expected_text)
+                print('currentText:\t' + current_text)
                 if expected_text == current_text:
-                    print ('pass')
+                    print('pass')
                 else:
-                    print ('fail')
+                    print('fail')
 
             elif check_type == 'printScreen':
                 img_name = self.name
@@ -112,15 +116,15 @@ class CaseTester:
         resolution_width = self.screen_resolution['width']
         resolution_height = self.screen_resolution['high']
         self.__change_resolution(resolution_width, resolution_height)
-        print (u'当前分辨率：' + str(resolution_width) + 'x' + str(resolution_height))
+        print(u'当前分辨率：' + str(resolution_width) + 'x' + str(resolution_height))
         for browser in self.browsers:
             self.browser = browser
             self.__open_browser(browser)
             for wh in self.browser_window_size:
                 self.high = wh['high']
                 self.width = wh['width']
-                print (self.name)
-                print (u"当前浏览器：" + self.browser + u"\t大小：" + str(self.width) + 'x' + str(self.high))
+                print(self.name)
+                print(u"当前浏览器：" + self.browser + u"\t大小：" + str(self.width) + 'x' + str(self.high))
                 try:
                     self.driver.set_window_size(self.width, self.high)
                     self.driver.get(self.url)
@@ -130,7 +134,7 @@ class CaseTester:
                     # check
                     self.__do_check()
                 except:
-                    print ('fail on exception')
+                    print('fail on exception')
                     traceback.print_exc()
                     continue
                 finally:

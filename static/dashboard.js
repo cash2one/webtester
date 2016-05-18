@@ -12,8 +12,8 @@ var actionDataInput = $('#actionDataInput');
 var checkXpathInput = $('#checkXpathInput');
 var checkDataInput = $('#checkDataInput');
 var caseNameInput = $('#caseNameInput');
-var windowScrollXInput=$('#windowScrollXInput');
-var windowScrollYInput=$('#windowScrollYInput');
+var windowScrollXInput = $('#windowScrollXInput');
+var windowScrollYInput = $('#windowScrollYInput');
 
 var actionTypeSelect = $('#actionTypeSelect');
 var checkTypeSelect = $('#checkTypeSelect');
@@ -60,45 +60,25 @@ checkXpathInput.click(
     }
 );
 
-addActionBtn.click(function () {
-    currentAction.xpath = actionXpathInput.val();
-    currentAction.actionType = actionTypeSelect.val();
-    if (currentAction.actionType == "sentkey") {
-        currentAction.input = actionDataInput.val();
-    }
-    actionList.push(currentAction);
-    currentAction = {};
-    console.log(JSON.stringify(actionList));
-});
-
-addCheckBtn.click(function () {
-    currentCheck.xpath = checkXpathInput.val();
-    currentCheck.checkType = checkTypeSelect.val();
-    if (currentCheck.checkType == 'expectedText') {
-        currentCheck.text = checkDataInput.val();
-    } else if (currentCheck.checkType == 'expectedUrl') {
-        currentCheck.url = checkDataInput.val();
-    }
-    checkList.push(currentCheck);
-    currentCheck = {};
-    console.log(JSON.stringify(checkList));
-});
-
 addCaseBtn.click(function () {
     var name = caseNameInput.val();
     url = urlInput.val();
     currentCase.url = url;
     currentCase.name = name;
-    currentCase.browserWindowSize = formatResolution(browserHighWidthSelect.val());
-    currentCase.browserWindowPosition = formatResolution(screenResolutionSelect.val());
-    currentCase.browserScrollPosition={x:windowScrollXInput.val(),y:windowScrollYInput.val()};
+    currentCase.browserWindowSize = [];
+    var inputWindowSizeList = browserHighWidthSelect.val();
+    for (var i = 0; i < inputWindowSizeList.length; i++) {
+        currentCase.browserWindowSize.push(formatResolution(inputWindowSizeList[i]));
+    }
+    currentCase.screenResolution = formatResolution(screenResolutionSelect.val());
+    currentCase.browserScrollPosition = {x: parseInt(windowScrollXInput.val()), y: parseInt(windowScrollYInput.val())};
     currentCase.browsers = browsersSelect.val();
     currentCase.actionList = actionList;
     currentCase.checkList = checkList;
     caseList.push(currentCase);
     var newRow = caseTable.insertRow(caseTable.rows.length);
     var nameCell = newRow.insertCell(0);
-    var aNode = $('<a>');
+    aNode = $('<a>');
     aNode.text(currentCase.name);
     $(nameCell).append(aNode);
     $(aNode).editable(
@@ -158,7 +138,7 @@ addActionBtn.click(
 
         var newRow = actionTable.insertRow(caseTable.rows.length);
         var xpathCell = newRow.insertCell(0);
-        var aNode = $('<a>');
+        aNode = $('<a>');
         aNode.text(currentAction.xpath);
         $(xpathCell).append(aNode);
         $(aNode).editable(
@@ -175,7 +155,7 @@ addActionBtn.click(
         );
 
         var typeCell = newRow.insertCell(1);
-        var aNode = $('<a>');
+        aNode = $('<a>');
         aNode.text(currentAction.actionType);
         $(typeCell).append(aNode);
         $(aNode).editable(
@@ -235,6 +215,7 @@ addActionBtn.click(
         $(deleteBtnCell).append(deleteBtn);
 
         currentAction = {};
+        console.log(JSON.stringify(actionList));
     }
 );
 
@@ -242,12 +223,12 @@ addCheckBtn.click(
     function () {
         currentCheck.xpath = checkXpathInput.val();
         currentCheck.checkType = checkTypeSelect.val();
-        currentCheck.input = checkDataInput.val();
+        currentCheck.checkData = checkDataInput.val();
         checkList.push(currentCheck);
 
         var newRow = checkTable.insertRow(caseTable.rows.length);
         var xpathCell = newRow.insertCell(0);
-        var aNode = $('<a>');
+        aNode = $('<a>');
         aNode.text(currentCheck.xpath);
         $(xpathCell).append(aNode);
         $(aNode).editable(
@@ -264,7 +245,7 @@ addCheckBtn.click(
         );
 
         var typeCell = newRow.insertCell(1);
-        var aNode = $('<a>');
+        aNode = $('<a>');
         aNode.text(currentCheck.checkType);
         $(typeCell).append(aNode);
         $(aNode).editable(
@@ -323,24 +304,27 @@ addCheckBtn.click(
             }
         );
         $(deleteBtnCell).append(deleteBtn);
-
+        currentCheck = {};
+        console.log(JSON.stringify(checkList));
     }
 );
 
 submitBtn.click(
     function () {
+        console.log(JSON.stringify({caseList: caseList}));
         $.post('/add_post',
-            {test_post:{caseList: caseList}},
+            {test_post: JSON.stringify({caseList: caseList})},
             function (data) {
+                //noinspection JSUnresolvedVariable
                 if (data.errno == 0) {
-                    $('#submitMsg').append(makeAlertDom(data.msg, "alert alert-success"));
+                    $('#submitMsg').html(makeAlertDom(data.msg, "alert alert-success"));
                 } else {
-                    $('#submitMsg').append(makeAlertDom(data.msg, "alert alert-danger"));
+                    $('#submitMsg').html(makeAlertDom(data.msg, "alert alert-danger"));
                 }
             }
         ).error(
             function () {
-                $('#submitMsg').append(makeAlertDom("post error", "alert alert-danger"));
+                $('#submitMsg').html(makeAlertDom("post error", "alert alert-danger"));
             }
         );
     }
@@ -387,19 +371,16 @@ function createXPathFromElement(elm) {
         } else if (elm.hasAttribute('class')) {
             segs.unshift(elm.localName.toLowerCase() + '[@class="' + elm.getAttribute('class') + '"]');
         } else {
-            for (i = 1, sib = elm.previousSibling; sib; sib = sib.previousSibling) {
+            for (var i = 1, sib = elm.previousSibling; sib; sib = sib.previousSibling) {
                 if (sib.localName == elm.localName)  i++;
             }
-            ;
             segs.unshift(elm.localName.toLowerCase() + '[' + i + ']');
         }
-        ;
     }
-    ;
     return segs.length ? '/' + segs.join('/') : null;
 };
 
-function formatResolution(resolution){
-    var widthHigh=resolution.split('x');
-    return {width:widthHigh[0],high:widthHigh[1]};
+function formatResolution(resolution) {
+    var widthHigh = resolution.split('x');
+    return {width: parseInt(widthHigh[0]), high: parseInt(widthHigh[1])};
 }
