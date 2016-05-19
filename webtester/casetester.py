@@ -119,7 +119,6 @@ class CaseTester:
     def set_case_json(self, case_json):
         self.case_json = case_json
 
-    @property
     def do_test(self):
         report_array=[]
         self.__parse_case_file()
@@ -130,7 +129,7 @@ class CaseTester:
             report = {'caseId': self.case_id, 'userId': self.user_id,
                       'screen_resolution': '%dx%d' % (resolution_width, resolution_height)}
             self.browser = browser
-            self.report['browser']=browser
+            report['browser']=browser
             self.__open_browser(browser)
             for wh in self.browser_window_size:
                 report['browser_window_size']=wh

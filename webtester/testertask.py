@@ -12,7 +12,7 @@ def test_testpost(test_post):
     tester = CaseTester()
     for case in cases:
         tester.set_case_json(case)
-        tester.do_test
+        tester.do_test()
 
 
 @shared_task

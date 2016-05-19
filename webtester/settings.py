@@ -76,9 +76,9 @@ WSGI_APPLICATION = 'webtester.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'webautotest',
+        'NAME': 'webautotester',
         'USER': 'root',
-        'PASSWORD': '1121Mysql',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306'
     }

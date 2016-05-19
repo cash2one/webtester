@@ -75,6 +75,7 @@ def add_test_post(request):
         if test_post_data is None:
             return JsonResponse({'errno': 2, 'msg': 'test_post needed'})
         test_post_data = __save_testpost(test_post_data, request)
+        print(test_post_data)
         test_testpost.delay(test_post_data)
         return JsonResponse({'errno': 0, 'msg': 'test_post add to queue success'})
     else:
@@ -111,7 +112,6 @@ def __save_testpost(testpost, request):
     post = TestPost(user_id=request.user.id, name=name, ext=testpost)
     post.save()
     # save caseList
-    test_post_json = json.loads(testpost, 'utf8')
     test_post_json['postId'] = post.id
     test_post_json['userId'] = request.user.id
     case_list = test_post_json['caseList']
@@ -130,6 +130,8 @@ def __save_testpost(testpost, request):
                           )
         case_entry.save()
         test_post_json['caseList'][i]['caseId'] = case_entry.id
+        test_post_json['caseList'][i]['userId'] = request.user.id
+        test_post_json['caseList'][i]['postId'] = post.id
         action_list = case.get('actionList')
         for action in action_list:
             action_entry = Action(xpath=action.get('xpath', ''),
