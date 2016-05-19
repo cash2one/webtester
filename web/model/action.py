@@ -8,6 +8,8 @@ class Action(models.Model):
     action_type = models.CharField(max_length=16)
     input=models.CharField(max_length=1024)
     wait_time = models.IntegerField(default=0)
+    create_time=models.DateTimeField(auto_now=True)
+    update_time=models.DateTimeField(auto_now=True)
     ext=models.TextField(max_length=1024)
 
     def __unicode__(self):

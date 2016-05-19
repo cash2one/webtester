@@ -12,6 +12,8 @@ class Report(models.Model):
     browser_size=models.CharField(max_length=32)
     result=models.IntegerField()
     result_content=models.TextField(max_length=1024)
+    create_time=models.DateTimeField(auto_now=True)
+    update_time=models.DateTimeField(auto_now=True)
     ext=models.TextField(max_length=1024)
 
     def __unicode__(self):

@@ -39,12 +39,14 @@ var currentCheck = {};
 var url = undefined;
 var cookieString = undefined;
 
+var pageCrawlerUrl=location.origin+"/crawler";
+
 cookieBtn.click(function () {
     cookieString = cookieInput.val()
 });
 
 urlBtn.click(function () {
-    var url = urlInput.val();
+    var url = pageCrawlerUrl+"?url="+urlInput.val();
     iframePage.attr('src', url);
 });
 
@@ -278,7 +280,7 @@ addCheckBtn.click(
 
         var inputCell = newRow.insertCell(2);
         var aNode = $('<a>');
-        aNode.text(currentCheck.input);
+        aNode.text(currentCheck.checkData);
         $(inputCell).append(aNode);
         $(aNode).editable(
             {
@@ -287,7 +289,7 @@ addCheckBtn.click(
                 success: function (response, newValue) {
                     var index = $(this).parent().closest('tr').index();
                     var myCase = actionList[index];
-                    myCase.input = newValue;
+                    myCase.checkData = newValue;
                     checkList[index] = myCase;
                 }
             }
