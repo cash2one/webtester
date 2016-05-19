@@ -83,8 +83,13 @@ def add_test_post(request):
 
 
 @csrf_exempt
-def add_post_report(request):
-    pass
+def add_post_report_list(request):
+    if request.method=='GET':
+        return JsonResponse({'errno': 3, 'msg': 'only support post'})
+    else:
+        report_list=json.loads(request,'utf8')
+        for report in report_list:
+            report_entry=Report()
 
 
 def crawler(request):
