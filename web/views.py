@@ -108,7 +108,7 @@ def __save_testpost(testpost, request):
     # save post
     test_post_json = json.loads(testpost, 'utf8')
     name = test_post_json.get('name', '%d:%s' % (request.user.id, str(time.time())))
-    post = TestPost(user_id=request.user.id, name=name, ext=testpost)
+    post = TestPost(user_id=request.user.id, name=name, ext=testpost,status=0)
     post.save()
     # save caseList
     test_post_json = json.loads(testpost, 'utf8')
