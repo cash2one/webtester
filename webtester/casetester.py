@@ -126,7 +126,7 @@ class CaseTester:
         resolution_height = self.screen_resolution['high']
         self.__change_resolution(resolution_width, resolution_height)
         for browser in self.browsers:
-            report = {'caseId': self.case_id, 'userId': self.user_id,
+            report = {'case_id': self.case_id, 'user_id': self.user_id,
                       'screen_resolution': '%dx%d' % (resolution_width, resolution_height)}
             self.browser = browser
             report['browser']=browser

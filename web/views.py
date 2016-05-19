@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 import urllib
 import httplib
 from webtester.settings import PAGE_CRAWLER_URL
+import traceback
 
 
 # Create your views here.
@@ -84,12 +85,23 @@ def add_test_post(request):
 
 @csrf_exempt
 def add_post_report_list(request):
-    if request.method=='GET':
+    if request.method == 'GET':
         return JsonResponse({'errno': 3, 'msg': 'only support post'})
     else:
-        report_list=json.loads(request,'utf8')
+        report_list = json.loads(request.POST['report_list'], 'utf8')
+        print(request.POST['report_list'])
+        report_id_list = []
         for report in report_list:
-            report_entry=Report()
+            report_entry = TestPost(user_id=report['user_id'],
+                                    post_id=report['post_id'],
+                                    case_name=report['name'],
+                                    browser=report['browser'],
+                                    resolution=report['resolution'],
+                                    result=report['result'],
+                                    result_content=report['report_contet'])
+            report_entry.save()
+            report_id_list.append(report_entry.id)
+        return JsonResponse({'errno': 0, 'msg': 'success', 'data': json.dumps(report_id_list)})
 
 
 def crawler(request):
@@ -97,9 +109,12 @@ def crawler(request):
     if url is None or url == '':
         return JsonResponse({'errno': 1, 'msg': 'need url'})
     params = urllib.urlencode({'url': url})
-    f = urllib.urlopen("%s?%s" % (PAGE_CRAWLER_URL, params))
-    page = f.read()
-    return HttpResponse(page)
+    try:
+        f = urllib.urlopen("%s?%s" % (PAGE_CRAWLER_URL, params))
+        page = f.read()
+        return HttpResponse(page)
+    except:
+        return JsonResponse({'errno': 1, 'msg': 'get html from proxy error ' + traceback.format_exc()})
 
 
 # @csrf_exempt
@@ -114,7 +129,7 @@ def __save_testpost(testpost, request):
     # save post
     test_post_json = json.loads(testpost, 'utf8')
     name = test_post_json.get('name', '%d:%s' % (request.user.id, str(time.time())))
-    post = TestPost(user_id=request.user.id, name=name, ext=testpost,status=0)
+    post = TestPost(user_id=request.user.id, name=name, ext=testpost, status=0)
     post.save()
     # save caseList
     test_post_json['postId'] = post.id

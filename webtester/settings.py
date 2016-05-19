@@ -132,3 +132,5 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 #Node JS Page Crawler proxy port
 PAGE_CRAWLER_URL = 'http://localhost:10080'
+
+ADD_REPORT_LIST_API='http://localhost:8000/add_report_list'
