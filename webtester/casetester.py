@@ -6,18 +6,17 @@ from time import *
 import traceback
 import win32api
 from random import Random
+import re
 
 
 class CaseTester:
     def __init__(self):
         self.case_json = None
 
-    # def __init__(self, case_json):
-    #     self.case_json = case_json
-
     def __parse_case_file(self):
-        self.case_id=self.case_json['caseId']
-        self.user_id=self.case_json['userId']
+        self.case_id = self.case_json['caseId']
+        self.user_id = self.case_json['userId']
+        self.post_id = self.case_json['postId']
         self.name = self.case_json['name']
         self.url = self.case_json['url']
         self.browsers = self.case_json.get('browsers', ['chrome'])
@@ -73,7 +72,7 @@ class CaseTester:
             check = self.check_list[check_index]
             check_type = check['checkType']
             if check_type == 'expectedUrl' or check_type == 'expectedText':
-                result_content = '%s<p>%d %s: ' % (result_content, check_index, check_type)
+                result_content = '%s\n%d %s: ' % (result_content, check_index, check_type)
                 expected = check['checkData']
                 if check_type == 'expectedUrl':
                     real = self.driver.current_url
@@ -83,11 +82,12 @@ class CaseTester:
                 result_content += ' excepted ' + expected
                 result_content += ' real ' + real
                 if expected == real:
-                    result_content += ' pass</p>'
+                    result_content += ' pass\n'
                 else:
-                    return {'result': False, 'result_content': result_content}
+                    result_content += ' fail\n'
+                    return {'result': False, 'result_content': result_content.strip()}
             elif check_type == 'screenContrast':
-                img_name = self.name+str(check_index)
+                img_name = self.name + str(check_index)
                 self.driver.get_screenshot_as_file(
                     "./reportImg/" + img_name + str(self.width) + "x" + str(
                         self.high) + "@1.jpg")
@@ -99,41 +99,31 @@ class CaseTester:
                 self.driver.get_screenshot_as_file(
                     "./reportImg/" + img_name + str(self.width) + "x" + str(
                         self.high) + "@2.jpg")
-            # elif check_type == 'expectedText':
-            #     xpath = check['xpath']
-            #     current_text = self.driver.find_element_by_xpath(xpath).text
-            #     expected_text = check['checkData']
-            #     print('expectedText:\t' + expected_text)
-            #     print('currentText:\t' + current_text)
-            #     if expected_text == current_text:
-            #         print('pass')
-            #     else:
-            #         print('fail')
             elif check_type == 'printScreen':
-                img_name = self.name+check_index
+                img_name = self.name + check_index
                 self.driver.get_screenshot_as_file(
                     "./reportImg/" + img_name + str(self.width) + "x" + str(
                         self.high) + ".jpg")
-        return {'result':True, 'result_content': result_content}
+        return {'result': True, 'result_content': result_content.strip()}
 
     def set_case_json(self, case_json):
         self.case_json = case_json
 
     def do_test(self):
-        report_array=[]
+        report_array = []
         self.__parse_case_file()
         resolution_width = self.screen_resolution['width']
         resolution_height = self.screen_resolution['high']
         self.__change_resolution(resolution_width, resolution_height)
         for browser in self.browsers:
-            report = {'case_id': self.case_id, 'user_id': self.user_id,
-                      'screen_resolution': '%dx%d' % (resolution_width, resolution_height)}
+            report = {'case_id': self.case_id, 'user_id': self.user_id, 'post_id': self.post_id,
+                      'resolution': '%dx%d' % (resolution_width, resolution_height)}
             self.browser = browser
-            report['browser']=browser
+            report['browser'] = browser
             self.__open_browser(browser)
             for wh in self.browser_window_size:
-                report['browser_window_size']=wh
-                report['name']=self.name
+                report['browser_window_size'] = wh
+                report['name'] = self.name
                 self.high = wh['high']
                 self.width = wh['width']
                 try:
@@ -143,7 +133,7 @@ class CaseTester:
                     self.__do_actions()
                     sleep(1)
                     # check
-                    result_info=self.__do_check()
+                    result_info = self.__do_check()
                     report.update(result_info)
                 except:
                     print('fail on exception')
@@ -156,7 +146,6 @@ class CaseTester:
                     report_array.append(report)
             self.driver.quit()
         return report_array
-
 
     def randomStr(self, num, randomChars):
         str = ''

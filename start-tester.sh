@@ -1,1 +1,1 @@
-celery -A webtester worker &
+celery -A webtester worker -l info &

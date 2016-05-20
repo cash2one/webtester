@@ -1,1 +1,1 @@
-start celery -A webtester worker
+start celery -A webtester worker -l info

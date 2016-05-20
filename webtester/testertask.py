@@ -14,6 +14,7 @@ def test_testpost(test_post):
     cases_json = json.loads(test_post)
     cases = cases_json['caseList']
     tester = CaseTester()
+    report_id_list=[]
     for case in cases:
         tester.set_case_json(case)
         report_list = tester.do_test()
@@ -23,8 +24,10 @@ def test_testpost(test_post):
             request = urllib2.Request(ADD_REPORT_LIST_API, data)
             res = urllib2.urlopen(request)
             print(res)
+            report_id_list.append(json.loads(res))
         except:
             traceback.print_exc()
+            continue
 
 
 @shared_task
