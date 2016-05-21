@@ -28,14 +28,27 @@
 $git clone https://github.com/liuyajun52/webtester
 $cd webtester
 $sh build.sh
+$cp webtester/setting.py.template webtester/setting.py  #修改数据库配置，另外还需在mysql中建立相应数据库
+$python manage.py migrate #初始化数据库表
+$vim webtester/setting.py 
 $sh start-web.sh
 ```
-
 
 ###测试机部署
 * 操作系统：同系统支持
 * 浏览器：安装所需测试浏览器，下载对应selenium webdriver，在path下可见
 * 其他要求 python >=2.7 安装所需模块
+* 将webtester/setting.py.template webtester/setting.py 并修改配置
+
+```python
+#web服务部署机器的redis地址，这里可以使用内网ip或公网ip或域名
+BROKER_URL = 'redis://localhost:6379/0'
+
+#web服务部署机器的域名或ip（内网或公网）
+WEB_MATER_HOST='localhost'
+#web服务部署端口
+WEB_MASTER_PORT=8080
+```
 
 ```cmd
 >git clone https://github.com/liuyajun52/webtester
