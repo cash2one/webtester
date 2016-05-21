@@ -6,26 +6,43 @@ $(document).ready(function () {
             {
                 url: '/show_post_list',
                 queryParamsType: 'limit',
+                striped: true,
+                search: 'true',
                 columns: [{
                     field: 'id',
                     title: 'ID',
                     sortable: true,
+                    align: 'left',
+                    width: '10%'
                 }, {
                     field: 'name',
-                    title: 'Name'
+                    title: 'Name',
+                    align: 'left',
+                    width: '10%'
                 }, {
                     field: 'ext',
-                    title: 'Conf'
+                    title: 'Conf',
+                    align: 'left',
+                    width: '30%'
                 }, {
                     field: 'exec_log',
-                    title: 'Log'
+                    title: 'Log',
+                    align: 'left',
+                    width: '30%'
                 }, {
-                    field: 'id',
-                    title: 'Operate',
-                    align: 'center',
-                    // events: operateEvents,
-                    formatter: operateFormatter
+                    field: 'status',
+                    title: 'Status',
+                    align: 'left',
+                    width: '10%'
                 }
+                    , {
+                        field: 'id',
+                        title: 'Operate',
+                        align: 'center',
+                        width: '10%',
+                        // events: operateEvents,
+                        formatter: operateFormatter
+                    }
                 ]
             }
         )
@@ -33,5 +50,5 @@ $(document).ready(function () {
 );
 
 function operateFormatter(value, row, index) {
-    return '<a href="/show_post_report_html?post_id=' + value +'">show report</a>';
+    return '<a href="/show_post_report_html?post_id=' + value + '">show report</a>';
 }

@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^show_post_list',api.show_post_list),
     url(r'^add_report_list', api.add_post_report_list),
     url(r'^show_report_list', api.show_report_list),
-    url(r'^show_post_report_html', api.show_post_report_html)
+    url(r'^show_post_report_html', api.show_post_report_html),
+    url(r'^notify_test_post_status',api.notify_test_post_status)
 ]

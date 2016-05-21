@@ -12,6 +12,7 @@ def get_from_url(url, params):
 
 
 def post_to_url(url, params):
+    print url
     params = urllib.urlencode(params)
     request = urllib2.Request(url, params)
     res = urllib2.urlopen(request)

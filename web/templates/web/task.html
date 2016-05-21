@@ -21,23 +21,6 @@
         body {
             padding-top: 70px;
         }
-
-        #iframePage {
-            width: 100%;
-            height: 600px;
-        }
-
-        .input-group {
-            margin-bottom: 3px;
-        }
-
-        span.label.label-primary {
-            margin-top: 6px;
-        }
-
-        .table td {
-            text-align: center;
-        }
     </style>
 </head>
 
@@ -60,7 +43,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="/dashboard">添加测试</a></li>
                 <li class="active"><a href="#">任务管理</a></li>
-                <li ><a href="/report">查看报告</a></li>
+                <li><a href="/report">查看报告</a></li>
                 <li><a href="/doc">使用说明</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -72,18 +55,21 @@
     </div>
 </nav>
 <div class="container">
-    <div class="toolbar"></div>
-    <table id="taskTable"
-           data-toolbar="#toolbar"
-           data-search="true"
-           data-show-refresh="true"
-           data-show-toggle="true"
-           data-show-columns="true"
-           data-show-export="true"
-           data-show-pagination-switch="true"
-           data-pagination="true"
-           data-page-list="[10, 25, 50, 100, ALL]">
-    </table>
+{#    <div class="row col-md-8">#}
+        <div class="toolbar"></div>
+        <table id="taskTable"
+               data-toolbar="#toolbar"
+               data-search="true"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-show-columns="true"
+               data-show-export="true"
+               data-show-pagination-switch="true"
+               data-pagination="true"
+               data-page-list="[10, 25, 50, 100, ALL]"
+               width="100%">
+        </table>
+{#    </div>#}
 </div>
 
 <!-- Bootstrap core JavaScript
