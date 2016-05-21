@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response
 from django.shortcuts import redirect
 
 
-def index(request):
+def index_view(request):
     template = loader.get_template('web/index.html')
     return HttpResponse(template.render())
 
@@ -42,12 +42,18 @@ def login_view(request):
 
 
 @login_required(login_url='/login')
-def dashboard(request):
+def dashboard_view(request):
     template = loader.get_template('web/dashboard.html')
     return HttpResponse(template.render())
 
 
 @login_required(login_url='/login')
-def report(request):
+def report_view(request):
     template = loader.get_template('web/report.html')
+    return HttpResponse(template.render())
+
+
+@login_required(login_url='/login')
+def task_view(request):
+    template = loader.get_template('web/task.html')
     return HttpResponse(template.render())

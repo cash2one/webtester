@@ -130,9 +130,14 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
+WEB_MATER_HOST='localhost'
+WEB_MASTER_PORT=8000
+
 # Node JS Page Crawler proxy port
 PAGE_CRAWLER_URL = 'http://localhost:10080'
 
-ADD_REPORT_LIST_API = 'http://localhost:8000/add_report_list'
+ADD_REPORT_LIST_API = 'http://%s:%d/add_report_list' %(WEB_MATER_HOST,WEB_MASTER_PORT)
+
+NOTIFY_TESt_POST_STATUS_API = 'http://%d:%d/notify_test_post_status' %(WEB_MATER_HOST,WEB_MASTER_PORT)
 
 SCREEN_SHOT_DIR = 'C:\\img'

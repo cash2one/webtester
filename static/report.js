@@ -1,5 +1,5 @@
 $(document).ready(function () {
-        $('#reportTabel').bootstrapTable(
+        $('#reportTable').bootstrapTable(
             {
                 url: '/show_report_list',
                 queryParamsType: 'limit',
@@ -31,4 +31,4 @@ $(document).ready(function () {
             }
         )
     }
-)
+);
