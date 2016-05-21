@@ -78,7 +78,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'webautotester',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': '1121Mysql',
         'HOST': 'localhost',
         'PORT': '3306'
     }
@@ -130,14 +130,12 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
-WEB_MATER_HOST='localhost'
-WEB_MASTER_PORT=8000
+WEB_MATER_HOST = 'localhost'
+WEB_MASTER_PORT = 8080
 
 # Node JS Page Crawler proxy port
 PAGE_CRAWLER_URL = 'http://localhost:10080'
-
-ADD_REPORT_LIST_API = 'http://%s:%d/add_report_list' %(WEB_MATER_HOST,WEB_MASTER_PORT)
-
-NOTIFY_TESt_POST_STATUS_API = 'http://%s:%d/notify_test_post_status' %(WEB_MATER_HOST,WEB_MASTER_PORT)
+ADD_REPORT_LIST_API = '/add_report_list'
+NOTIFY_TEST_POST_STATUS_API = '/notify_test_post_status'
 
 SCREEN_SHOT_DIR = 'C:\\img'
