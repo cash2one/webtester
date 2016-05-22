@@ -75,11 +75,13 @@ checkXpathInput.click(
     }
 );
 
+
 addCaseBtn.click(function () {
     var name = caseNameInput.val();
     url = urlInput.val();
     currentCase.url = url;
     currentCase.name = name;
+    currentCase.cookieListStr = cookieInput.val() == '' ? '[]' : cookieInput.val();
     currentCase.browserWindowSize = [];
     var inputWindowSizeList = browserHighWidthSelect.val();
     for (var i = 0; i < inputWindowSizeList.length; i++) {
@@ -352,12 +354,28 @@ iframePage.load(
         var contents = iframePage.contents();
         var elements = contents[0].all;
         for (var i = 0; i < elements.length; i++) {
+            if (elements[i].hasAttribute('href')) {
+                var href = elements[i].getAttribute('href')
+                elements[i].setAttribute('href', getAbsoluteUrl(url, href))
+            }
+            if (elements[i].hasAttribute('src')) {
+                var src = elements[i].getAttribute('src');
+                elements[i].setAttribute('src', getAbsoluteUrl(url, src))
+            }
             elements[i].onclick = function (event) {
-                event.preventDefault();// 取消事件的默认行为
-                event.stopPropagation(); // 阻止事件的传播
                 var xpathString = createXPathFromElement(elements, this);
-                xpathInput.val(xpathString).focus();
                 makeEleRedBorder(xpathString);
+                xpathInput.val(xpathString);
+                if (this.hasAttribute('href')) {
+                    event.preventDefault();// 取消事件的默认行为
+                    cookie_list = cookieInput.val();
+                    var newUrl = this.getAttribute('href');
+                    urlInput.val(newUrl);
+                    $('#formUrl').val(newUrl);
+                    $('#formCookie').val(cookie_list);
+                    $('#hiddenForm').submit();
+                }
+                event.stopPropagation(); // 阻止事件的传播
             }
         }
     }
@@ -417,4 +435,38 @@ $.fn.xpathEvaluate = function (xpathExpression) {
 
     $result = jQuery([]).pushStack(result);
     return $result;
+}
+
+function getAbsoluteUrl(base, relative) {
+    console.log(base+'\t'+relative+'\n');
+    if (relative.indexOf('//') > -1) {
+        console.log(base);
+        return relative;
+    }
+    if(relative.indexOf('/')==0){
+        return getOriginFromUrl(base)+relative;
+    }
+    var stack = base.split("/"),
+        parts = relative.split("/");
+    stack.pop(); // remove current file name (or empty string)
+                 // (omit if "base" is the current folder without trailing slash)
+    for (var i = 0; i < parts.length; i++) {
+        if (parts[i] == ".")
+            continue;
+        if (parts[i] == "..")
+            stack.pop();
+        else
+            stack.push(parts[i]);
+    }
+    console.log(stack.join('/'));
+    return stack.join("/");
+}
+
+originReg=/.*\/\/([^\/]*)/;
+function getOriginFromUrl(url) {
+    var matchs=originReg.exec(url);
+    if(matchs.length>=1){
+        return matchs[0];
+    }
+    return undefined;
 }

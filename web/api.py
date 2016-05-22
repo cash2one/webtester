@@ -12,7 +12,7 @@ from webtester.settings import PAGE_CRAWLER_URL
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from webtester.util import get_from_url,post_to_url
+from webtester.util import get_from_url, post_to_url
 
 
 @csrf_exempt
@@ -143,6 +143,8 @@ def crawler(request):
         return JsonResponse({'errno': 1, 'msg': 'need url'})
     try:
         page = post_to_url(PAGE_CRAWLER_URL, request.POST)
+        if page is None or page == '':
+            page = get_from_url(url)
         return HttpResponse(page)
     except:
         return JsonResponse({'errno': 1, 'msg': 'get html from proxy error ' + traceback.format_exc()})
