@@ -141,12 +141,19 @@ addCaseBtn.click(function () {
     $(deleteBtnCell).append(deleteBtn);
 
     console.log(JSON.stringify(caseList));
+    removeAllTableRow(actionTable,actionList.length);
+    removeAllTableRow(checkTable,checkList.length);
     actionList = [];
     checkList = [];
     currentCase = {};
-    $(actionTable).empty();
-    $(checkTable).empty();
 });
+
+
+function removeAllTableRow(table,rowsSum) {
+    for(var i=0;i<rowsSum;i++){
+        table.deleteRow(0);
+    }
+}
 
 addActionBtn.click(
     function () {
@@ -155,7 +162,7 @@ addActionBtn.click(
         currentAction.input = actionDataInput.val();
         actionList.push(currentAction);
 
-        var newRow = actionTable.insertRow(caseTable.rows.length);
+        var newRow = actionTable.insertRow(actionTable.rows.length);
         var xpathCell = newRow.insertCell(0);
         aNode = $('<a>');
         aNode.text(currentAction.xpath);
@@ -245,7 +252,7 @@ addCheckBtn.click(
         currentCheck.checkData = checkDataInput.val();
         checkList.push(currentCheck);
 
-        var newRow = checkTable.insertRow(caseTable.rows.length);
+        var newRow = checkTable.insertRow(checkTable.rows.length);
         var xpathCell = newRow.insertCell(0);
         aNode = $('<a>');
         aNode.text(currentCheck.xpath);
