@@ -37,7 +37,7 @@ class CaseTester:
             self.driver = webdriver.Chrome()
         elif browser == 'firefox':
             self.driver = webdriver.Firefox()
-        elif browser == 'IE':
+        elif browser == 'ie':
             self.driver = webdriver.Ie()
         else:
             self.driver = webdriver.Chrome()
