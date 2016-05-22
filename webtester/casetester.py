@@ -19,6 +19,7 @@ class CaseTester:
         self.post_id = self.case_json['postId']
         self.name = self.case_json['name']
         self.url = self.case_json['url']
+        self.cookieListStr=self.case_json.get('cookieListStr','[]')
         self.browsers = self.case_json.get('browsers', ['chrome'])
         self.action_list = self.case_json.get('actionList', [])
         self.check_list = self.case_json.get('checkList', [])
@@ -100,7 +101,7 @@ class CaseTester:
                     "./reportImg/" + img_name + str(self.width) + "x" + str(
                         self.high) + "@2.jpg")
             elif check_type == 'printScreen':
-                img_name = self.name + check_index
+                img_name = self.name + str(check_index)
                 self.driver.get_screenshot_as_file(
                     "./reportImg/" + img_name + str(self.width) + "x" + str(
                         self.high) + ".jpg")
@@ -120,6 +121,7 @@ class CaseTester:
                       'resolution': '%dx%d' % (resolution_width, resolution_height)}
             self.browser = browser
             report['browser'] = browser
+            self.addCookies(self.cookieListStr)
             self.__open_browser(browser)
             for wh in self.browser_window_size:
                 report['browser_window_size'] = wh
@@ -165,3 +167,8 @@ class CaseTester:
         dm.DisplayFixedOutput = 0
         # 1 is stretched to fill the larger screen space .2 is centered in the larger screen space
         win32api.ChangeDisplaySettings(dm, 0)
+
+
+    def addCookies(self,cookieListStr):
+        for cookie in cookieListStr:
+            self.driver.add_cookie(cookie)
