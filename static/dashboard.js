@@ -5,7 +5,7 @@ var addCaseBtn = $('#addCaseBtn');
 var submitBtn = $('#submitBtn');
 
 var urlInput = $('#urlInput');
-var nameInput=$('#nameInput');
+var nameInput = $('#nameInput');
 var cookieInput = $('#cookieInput');
 var actionXpathInput = $('#actionXpathInput');
 var actionDataInput = $('#actionDataInput');
@@ -38,11 +38,11 @@ var currentCheck = {};
 
 var url = undefined;
 var oldElemList = [];
-var cookie_list=undefined;
+var cookie_list = undefined;
 
 urlBtn.click(function () {
-    url=urlInput.val();
-    cookie_list=cookieInput.val();
+    url = urlInput.val();
+    cookie_list = cookieInput.val();
     $('#formUrl').val(url);
     $('#formCookie').val(cookie_list);
     $('#hiddenForm').submit();
@@ -142,6 +142,8 @@ addCaseBtn.click(function () {
     actionList = [];
     checkList = [];
     currentCase = {};
+    $(actionTable).empty();
+    $(checkTable).empty();
 });
 
 addActionBtn.click(
@@ -326,7 +328,7 @@ addCheckBtn.click(
 
 submitBtn.click(
     function () {
-        console.log(JSON.stringify({name:nameInput.val(),caseList: caseList}));
+        console.log(JSON.stringify({name: nameInput.val(), caseList: caseList}));
         $.post('/add_post',
             {test_post: JSON.stringify({caseList: caseList})},
             function (data) {
@@ -353,7 +355,7 @@ iframePage.load(
             elements[i].onclick = function (event) {
                 event.preventDefault();// 取消事件的默认行为
                 event.stopPropagation(); // 阻止事件的传播
-                var xpathString = createXPathFromElement(elements,this);
+                var xpathString = createXPathFromElement(elements, this);
                 xpathInput.val(xpathString).focus();
                 makeEleRedBorder(xpathString);
             }
@@ -369,7 +371,7 @@ function makeAlertDom(text, msgClass) {
     return msg;
 }
 
-function createXPathFromElement(allNodes,elm) {
+function createXPathFromElement(allNodes, elm) {
     for (var segs = []; elm && elm.nodeType == 1; elm = elm.parentNode) {
         if (elm.hasAttribute('id')) {
             var uniqueIdCount = 0;
