@@ -21,9 +21,10 @@ def add_test_post(request):
         return JsonResponse({'errno': 3, 'msg': 'only support post'})
     if request.user.is_authenticated():
         test_post_data = request.POST['test_post']
+        report_name = request.POST.get('name', 'unname')
         if test_post_data is None:
             return JsonResponse({'errno': 2, 'msg': 'test_post needed'})
-        test_post_data = __save_testpost(test_post_data, request)
+        test_post_data = __save_testpost(report_name, test_post_data, request)
         print(test_post_data)
         test_testpost.delay(test_post_data)
         return JsonResponse({'errno': 0, 'msg': 'test_post add to queue success'})
@@ -150,11 +151,10 @@ def crawler(request):
         return JsonResponse({'errno': 1, 'msg': 'get html from proxy error ' + traceback.format_exc()})
 
 
-def __save_testpost(testpost, request):
+def __save_testpost(request_name, testpost, request):
     # save post
     test_post_json = json.loads(testpost, 'utf8')
-    name = test_post_json.get('name', '%d:%s' % (request.user.id, str(time.time())))
-    post = TestPost(user_id=request.user.id, name=name, ext=testpost, status=0)
+    post = TestPost(user_id=request.user.id, name=request_name, ext=testpost, status=0)
     post.save()
     # save caseList
     test_post_json['postId'] = post.id

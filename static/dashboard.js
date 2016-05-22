@@ -5,7 +5,7 @@ var addCaseBtn = $('#addCaseBtn');
 var submitBtn = $('#submitBtn');
 
 var urlInput = $('#urlInput');
-var nameInput = $('#nameInput');
+var postNameInput = $('#postNameInput');
 var cookieInput = $('#cookieInput');
 var actionXpathInput = $('#actionXpathInput');
 var actionDataInput = $('#actionDataInput');
@@ -337,7 +337,7 @@ addCheckBtn.click(
 
 submitBtn.click(
     function () {
-        console.log(JSON.stringify({name: nameInput.val(), caseList: caseList}));
+        console.log(JSON.stringify({name: postNameInput.val(), caseList: caseList}));
         $.post('/add_post',
             {test_post: JSON.stringify({caseList: caseList})},
             function (data) {
@@ -377,7 +377,7 @@ iframePage.load(
                     event.preventDefault();// 取消事件的默认行为
                     cookie_list = cookieInput.val();
                     var newUrl = this.getAttribute('href');
-                    urlInput.val(newUrl);
+                    // urlInput.val(newUrl);
                     $('#formUrl').val(newUrl);
                     $('#formCookie').val(cookie_list);
                     $('#hiddenForm').submit();
