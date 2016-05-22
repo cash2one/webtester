@@ -10,11 +10,11 @@ class Report(models.Model):
     browser=models.CharField(max_length=32)
     resolution=models.CharField(max_length=32)
     browser_size=models.CharField(max_length=32)
-    result=models.IntegerField()
-    result_content=models.TextField(max_length=1024)
+    result=models.CharField(max_length=32,null=True)
+    result_content=models.TextField(max_length=1024,null=True)
     create_time=models.DateTimeField(auto_now=True)
     update_time=models.DateTimeField(auto_now=True)
-    ext=models.TextField(max_length=1024)
+    ext=models.TextField(max_length=1024,null=True)
 
     def __unicode__(self):
         return "%d:%s" % (self.id, self.case.name)

@@ -21,9 +21,6 @@
         body {
             padding-top: 70px;
         }
-        .table td {
-            text-align: center;
-        }
     </style>
 </head>
 
@@ -45,8 +42,8 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/dashboard">添加测试</a></li>
-                <li ><a href="/task">任务管理</a></li>
-                <li class="active"><a href="/report">查看报告</a></li>
+                <li class="active"><a href="#">任务管理</a></li>
+                <li><a href="/report">查看报告</a></li>
                 <li><a href="/doc">使用说明</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -58,18 +55,21 @@
     </div>
 </nav>
 <div class="container">
-    <div class="toolbar"></div>
-    <table id="reportTable"
-           data-toolbar="#toolbar"
-           data-search="true"
-           data-show-refresh="true"
-           data-show-toggle="true"
-           data-show-columns="true"
-           data-show-export="true"
-           data-show-pagination-switch="true"
-           data-pagination="true"
-           data-page-list="[10, 25, 50, 100, ALL]">
-    </table>
+{#    <div class="row col-md-8">#}
+        <div class="toolbar"></div>
+        <table id="taskTable"
+               data-toolbar="#toolbar"
+               data-search="true"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-show-columns="true"
+               data-show-export="true"
+               data-show-pagination-switch="true"
+               data-pagination="true"
+               data-page-list="[10, 25, 50, 100, ALL]"
+               width="100%">
+        </table>
+{#    </div>#}
 </div>
 
 <!-- Bootstrap core JavaScript
@@ -82,6 +82,6 @@
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
 {#<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/i18n/defaults-*.min.js"></script>#}
 <script src="/static/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-<script src="/static/report.js"></script>
+<script src="/static/task.js"></script>
 </body>
 </html>

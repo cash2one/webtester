@@ -10,6 +10,9 @@ from web.models import *
 from django.views.decorators.csrf import csrf_exempt
 from webtester.settings import PAGE_CRAWLER_URL
 from django.http import HttpResponse
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from webtester.util import get_from_url,post_to_url
 
 
 @csrf_exempt
@@ -52,6 +55,38 @@ def add_post_report_list(request):
 
 
 @csrf_exempt
+def show_post_report_html(request):
+    post_id = request.GET.get('post_id')
+    if post_id is None:
+        return render(request, 'web/error.html', {'msg': 'need post_id', 'desc': ''})
+    post_entry = get_object_or_404(TestPost, id=post_id)
+    if post_entry is None:
+        return render(request, 'web/error.html', {'msg': 'post not found whith id ' + str(post_id), 'desc': ''})
+    status = post_entry.status
+    report_list = Report.objects.filter(post_id=post_id)
+    return render(request, 'web/report_tep.html',
+                  {'post_id': post_id, 'name': post_entry.name, 'status': status, 'report_list': report_list})
+
+
+@csrf_exempt
+def notify_test_post_status(request):
+    post_id = request.POST.get('post_id')
+    status = request.POST.get('status')
+    log = request.POST.get('log')
+    if post_id is None or status is None:
+        return JsonResponse({'errno': 3, 'msg': 'need post_id and status'})
+    try:
+        post_entry = TestPost.objects.get(id=post_id)
+        post_entry.status = status
+        if log is not None:
+            post_entry.exec_log += log
+        post_entry.save()
+        return JsonResponse({'errno': 0, 'msg': 'success'})
+    except:
+        return JsonResponse({'errno': 4, 'msg': 'post not found'})
+
+
+@csrf_exempt
 def show_report_list(request):
     user_id = request.user.id
     if user_id is None:
@@ -66,6 +101,8 @@ def show_report_list(request):
             return JsonResponse({'errno': 3, 'msg': 'need offset and limit'})
         report_list = Report.objects.filter(user_id=user_id).order_by('-create_time')
         if order is not None:
+            if sort == 'desc':
+                order = '-' + order
             report_list = report_list.order_by(order)
         if search is not None and search != '':
             report_list = report_list.filter(case_name__icontains=search)
@@ -75,25 +112,40 @@ def show_report_list(request):
 
 
 @csrf_exempt
+def show_post_list(request):
+    user_id = request.user.id
+    if user_id is None:
+        return JsonResponse({'errno': 1, 'msg': 'this api need authed'})
+    else:
+        offset = request.GET.get('offset')
+        limit = request.GET.get('limit')
+        order = request.GET.get('order ')
+        search = request.GET.get('search')
+        sort = request.GET.get('sort')
+        if offset is None or limit is None:
+            return JsonResponse({'errno': 3, 'msg': 'need offset and limit'})
+        post_list = TestPost.objects.filter(user_id=user_id).order_by('-create_time')
+        if order is not None:
+            if sort == 'desc':
+                order = '-' + order
+            post_list = post_list.order_by(order)
+        if search is not None and search != '':
+            post_list = post_list.filter(case_name__icontains=search)
+        post_list = list(post_list.values())
+        post_list = json.dumps(post_list, cls=DjangoJSONEncoder)
+        return HttpResponse(post_list)
+
+
+@csrf_exempt
 def crawler(request):
-    url = request.GET['url']
+    url = request.POST['url']
     if url is None or url == '':
         return JsonResponse({'errno': 1, 'msg': 'need url'})
-    params = urllib.urlencode({'url': url})
     try:
-        f = urllib.urlopen("%s?%s" % (PAGE_CRAWLER_URL, params))
-        page = f.read()
+        page = post_to_url(PAGE_CRAWLER_URL, request.POST)
         return HttpResponse(page)
     except:
         return JsonResponse({'errno': 1, 'msg': 'get html from proxy error ' + traceback.format_exc()})
-
-
-# @csrf_exempt
-# def show_report(request):
-#     if request.user.is_authenticated():
-#         return JsonResponse({'errno': 0, 'msg': 'test_post add to queue success'})
-#     else:
-#         return JsonResponse({'errno': 1, 'msg': 'this api need to be authed'})
 
 
 def __save_testpost(testpost, request):

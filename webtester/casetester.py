@@ -69,11 +69,12 @@ class CaseTester:
 
     def __do_check(self):
         result_content = ''
+        result = 'success'
         for check_index in range(0, len(self.check_list)):
             check = self.check_list[check_index]
             check_type = check['checkType']
             if check_type == 'expectedUrl' or check_type == 'expectedText':
-                result_content = '%s\n%d %s: ' % (result_content, check_index, check_type)
+                result_content = '%s\nCheck %d %s: ' % (result_content, check_index, check_type)
                 expected = check['checkData']
                 if check_type == 'expectedUrl':
                     real = self.driver.current_url
@@ -86,7 +87,7 @@ class CaseTester:
                     result_content += ' pass\n'
                 else:
                     result_content += ' fail\n'
-                    return {'result': False, 'result_content': result_content.strip()}
+                    result = 'fail'
             elif check_type == 'screenContrast':
                 img_name = self.name + str(check_index)
                 self.driver.get_screenshot_as_file(
@@ -105,7 +106,7 @@ class CaseTester:
                 self.driver.get_screenshot_as_file(
                     "./reportImg/" + img_name + str(self.width) + "x" + str(
                         self.high) + ".jpg")
-        return {'result': True, 'result_content': result_content.strip()}
+        return {'result': result, 'result_content': result_content.strip()}
 
     def set_case_json(self, case_json):
         self.case_json = case_json

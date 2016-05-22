@@ -12,9 +12,9 @@ class Case(models.Model):
     browser_window_size = models.CharField(max_length=128)
     screen_resolution = models.CharField(max_length=128)
     browser_scroll_position = models.CharField(max_length=128)
-    create_time=models.DateTimeField(auto_now=True)
-    update_time=models.DateTimeField(auto_now=True)
-    ext=models.TextField(max_length=1024)
+    create_time = models.DateTimeField(auto_now=True)
+    update_time = models.DateTimeField(auto_now=True)
+    ext = models.TextField(max_length=1024)
 
     def __unicode__(self):
         return "%d:%s" % (self.id, self.name)

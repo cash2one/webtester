@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提测报告{{ post_id }} {{ post_name }}</title>
+</head>
+<body>
+<h1>提测报告{{ post_id }} {{ post_name }}</h1>
+<h2>任务状态: {{ status }}</h2>
+<table border="1">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Browser
+        </th>
+        <th>
+            Resolution
+        </th>
+        <th>
+            Browser Size
+        </th>
+        <th>
+            Result
+        </th>
+        <th>
+            Desc
+        </th>
+    </tr>
+    {% for report in report_list %}
+        <tr>
+            <td>
+                {{ report.case_name }}
+            </td>
+            <td>
+                {{ report.browser }}
+            </td>
+            <td>
+                {{ report.resolution }}
+            </td>
+            <td>
+                {{ report.browser_size }}
+            </td>
+            <td>
+                {{ report.result }}
+            </td>
+            <td>
+                {{ report.result_content }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
