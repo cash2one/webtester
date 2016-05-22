@@ -30,7 +30,7 @@ def test_testpost(test_post):
             res = post_to_url('http://%s:%d%s' % (WEB_MATER_HOST, WEB_MASTER_PORT, ADD_REPORT_LIST_API), data)
             report_id_list.append(json.loads(res))
         except:
-            log += '\n' + traceback.extract_stack()
+            log += '\n' + traceback.format_exc()
             traceback.print_exc()
             has_error = True
             continue
