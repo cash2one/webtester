@@ -1,11 +1,11 @@
 var urlBtn = $('#urlBtn');
-var cookieBtn = $('#cookieBtn');
 var addActionBtn = $('#addActionBtn');
 var addCheckBtn = $('#addCheckBtn');
 var addCaseBtn = $('#addCaseBtn');
 var submitBtn = $('#submitBtn');
 
 var urlInput = $('#urlInput');
+var nameInput=$('#nameInput');
 var cookieInput = $('#cookieInput');
 var actionXpathInput = $('#actionXpathInput');
 var actionDataInput = $('#actionDataInput');
@@ -37,17 +37,15 @@ var currentAction = {};
 var currentCheck = {};
 
 var url = undefined;
-var cookieString = undefined;
-
-var pageCrawlerUrl=location.origin+"/crawler";
-
-cookieBtn.click(function () {
-    cookieString = cookieInput.val()
-});
+var oldElemList = [];
+var cookie_list=undefined;
 
 urlBtn.click(function () {
-    var url = pageCrawlerUrl+"?url="+urlInput.val();
-    iframePage.attr('src', url);
+    url=urlInput.val();
+    cookie_list=cookieInput.val();
+    $('#formUrl').val(url);
+    $('#formCookie').val(cookie_list);
+    $('#hiddenForm').submit();
 });
 
 actionXpathInput.click(
@@ -55,6 +53,21 @@ actionXpathInput.click(
         xpathInput = actionXpathInput;
     }
 );
+
+
+function makeEleRedBorder(value) {
+    if (value != '') {
+        for (var i = 0; i < oldElemList.length; i++) {
+            $(oldElemList[i]).css("border", "");
+        }
+        var elemList = iframePage.contents().xpathEvaluate(value);
+        oldElemList = elemList;
+        for (var i = 0; i < elemList.length; i++) {
+            var elem = elemList[i];
+            $(elem).css("border", "3px solid red")
+        }
+    }
+};
 
 checkXpathInput.click(
     function () {
@@ -313,7 +326,7 @@ addCheckBtn.click(
 
 submitBtn.click(
     function () {
-        console.log(JSON.stringify({caseList: caseList}));
+        console.log(JSON.stringify({name:nameInput.val(),caseList: caseList}));
         $.post('/add_post',
             {test_post: JSON.stringify({caseList: caseList})},
             function (data) {
@@ -340,8 +353,9 @@ iframePage.load(
             elements[i].onclick = function (event) {
                 event.preventDefault();// 取消事件的默认行为
                 event.stopPropagation(); // 阻止事件的传播
-                var xpathString = createXPathFromElement(this);
-                xpathInput.val(xpathString);
+                var xpathString = createXPathFromElement(elements,this);
+                xpathInput.val(xpathString).focus();
+                makeEleRedBorder(xpathString);
             }
         }
     }
@@ -355,8 +369,7 @@ function makeAlertDom(text, msgClass) {
     return msg;
 }
 
-function createXPathFromElement(elm) {
-    var allNodes = document.getElementsByTagName('*');
+function createXPathFromElement(allNodes,elm) {
     for (var segs = []; elm && elm.nodeType == 1; elm = elm.parentNode) {
         if (elm.hasAttribute('id')) {
             var uniqueIdCount = 0;
@@ -385,4 +398,21 @@ function createXPathFromElement(elm) {
 function formatResolution(resolution) {
     var widthHigh = resolution.split('x');
     return {width: parseInt(widthHigh[0]), high: parseInt(widthHigh[1])};
+}
+
+$.fn.xpathEvaluate = function (xpathExpression) {
+    // NOTE: vars not declared local for debug purposes
+    var $this = this.first(); // Don't make me deal with multiples before coffee
+
+    // Evaluate xpath and retrieve matching nodes
+    var xpathResult = this[0].evaluate(xpathExpression, this[0], null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+
+    var result = [];
+    var elem = undefined;
+    while (elem = xpathResult.iterateNext()) {
+        result.push(elem);
+    }
+
+    $result = jQuery([]).pushStack(result);
+    return $result;
 }

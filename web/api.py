@@ -12,7 +12,7 @@ from webtester.settings import PAGE_CRAWLER_URL
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from webtester.util import get_from_url
+from webtester.util import get_from_url,post_to_url
 
 
 @csrf_exempt
@@ -138,11 +138,11 @@ def show_post_list(request):
 
 @csrf_exempt
 def crawler(request):
-    url = request.GET['url']
+    url = request.POST['url']
     if url is None or url == '':
         return JsonResponse({'errno': 1, 'msg': 'need url'})
     try:
-        page = get_from_url(PAGE_CRAWLER_URL, {'url': url})
+        page = post_to_url(PAGE_CRAWLER_URL, request.POST)
         return HttpResponse(page)
     except:
         return JsonResponse({'errno': 1, 'msg': 'get html from proxy error ' + traceback.format_exc()})

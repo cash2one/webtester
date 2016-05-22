@@ -12,16 +12,16 @@ const DEFAULT_HOST = '0.0.0.0';
 var workAmount = (process.argv[2] == undefined ? DEFAULT_WORK_AMOUNT : process.argv[2]);
 var host = (process.argv[3] == undefined ? DEFAULT_HOST : process.argv[3]);
 var port = (process.argv[4] == undefined ? DEFAULT_PORT : process.argv[4]);
-var phInstance=null;
-if(cluser.isMaster){
-    console.log('JS Page Crawler run on '+host+':'+port);
-    for(var i =0;i<workAmount;i++){
+var phInstance = null;
+if (cluser.isMaster) {
+    console.log('JS Page Crawler run on ' + host + ':' + port);
+    for (var i = 0; i < workAmount; i++) {
         cluser.fork();
     }
-    cluser.on('exit',function (worker,code,signal) {
+    cluser.on('exit', function (worker, code, signal) {
         cluser.fork();
     });
-}else {
+} else {
     phInstance = phantom.create(['--ignore-ssl-errors=yes', '--load-images=no']);
     http.createServer(function (req, res) {
             if (req.method == 'POST') {
@@ -43,6 +43,7 @@ if(cluser.isMaster){
                 req.on('end', function () {
                     var post = qs.parse(body);
                     var url = post['url'];
+                    var cookie_list = post['cookie_list'];
                     if (url == undefined) {
                         res.writeHead(400)
                         res.end(
@@ -50,7 +51,7 @@ if(cluser.isMaster){
                         );
                         return;
                     }
-                    getHTMLFromPhantom(url, res);
+                    getHTMLFromPhantom(url, cookie_list, res);
                 });
             } else {
                 var queryData = url.parse(req.url, true).query;
@@ -62,27 +63,41 @@ if(cluser.isMaster){
                     );
                     return;
                 }
-                getHTMLFromPhantom(u, res);
+                getHTMLFromPhantom(u,undefined, res);
             }
         }
     ).listen(port, host);
 }
 
-function getHTMLFromPhantom(url, res) {
-    var sitepage=null;
+function getHTMLFromPhantom(url, cookie_list, res) {
+    var sitepage = undefined;
+    var cookieJsonList = undefined;
+    try {
+        cookieJsonList = JSON.parse(cookie_list)
+    } catch (e) {
+        console.log(e)
+    }
     phInstance.then(function (ph) {
+        if (cookieJsonList != undefined) {
+            for (var i = 0; i < cookieJsonList.length; i++) {
+                ph.addCookie(cookieJsonList[i]);
+            }
+        }
         return ph.createPage();
     }).then(function (page) {
-        sitepage=page;
+        sitepage = page;
         return page.open(url);
-    }).then(function(status){
-            return sitepage.property('content');
-        })
+    }).then(function (status) {
+        return sitepage.property('content');
+    })
         .then(function (content) {
             // console.log(sitepage.property('Content-Type'));
             sitepage.close();
             res.writeHead(200);
             res.end(content);
+            phInstance.then(function (ph) {
+                ph.clearCookies();
+            });
         })
         .catch(function (error) {
             res.writeHead(500);
