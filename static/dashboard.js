@@ -438,9 +438,7 @@ $.fn.xpathEvaluate = function (xpathExpression) {
 }
 
 function getAbsoluteUrl(base, relative) {
-    console.log(base+'\t'+relative+'\n');
-    if (relative.indexOf('//') > -1) {
-        console.log(base);
+    if (relative.indexOf('//') > -1||relative.indexOf('javascript')==0) {
         return relative;
     }
     if(relative.indexOf('/')==0){
@@ -458,7 +456,6 @@ function getAbsoluteUrl(base, relative) {
         else
             stack.push(parts[i]);
     }
-    console.log(stack.join('/'));
     return stack.join("/");
 }
 
