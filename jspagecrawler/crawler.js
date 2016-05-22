@@ -78,26 +78,24 @@ function getHTMLFromPhantom(url, cookie_list, res) {
         console.log(e)
     }
     phInstance.then(function (ph) {
-        if (cookieJsonList != undefined) {
-            for (var i = 0; i < cookieJsonList.length; i++) {
-                ph.addCookie(cookieJsonList[i]);
-            }
-        }
         return ph.createPage();
     }).then(function (page) {
         sitepage = page;
+        if (cookieJsonList != undefined) {
+            for (var i = 0; i < cookieJsonList.length; i++) {
+                var cookie=cookieJsonList[i];
+                page.addCookie(cookie);
+            }
+        }
         return page.open(url);
     }).then(function (status) {
-        return sitepage.property('content');
-    })
+            return sitepage.property('content');
+        })
         .then(function (content) {
             // console.log(sitepage.property('Content-Type'));
             sitepage.close();
             res.writeHead(200);
             res.end(content);
-            phInstance.then(function (ph) {
-                ph.clearCookies();
-            });
         })
         .catch(function (error) {
             res.writeHead(500);
