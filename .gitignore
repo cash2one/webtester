@@ -4,3 +4,4 @@
 node_modules
 migrations
 webtester/settings.py
+static/admin

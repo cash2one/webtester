@@ -1,5 +1,5 @@
 from django.db import models
-from case import Case
+from .case import Case
 
 
 class Action(models.Model):

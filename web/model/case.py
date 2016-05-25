@@ -1,5 +1,5 @@
 from django.db import models
-from testpost import TestPost
+from .testpost import TestPost
 
 
 class Case(models.Model):

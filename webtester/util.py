@@ -1,5 +1,8 @@
-import urllib, urllib2
-
+import urllib
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2
 
 def get_from_url(url, params):
     params = urllib.urlencode(params)
@@ -12,7 +15,6 @@ def get_from_url(url, params):
 
 
 def post_to_url(url, params):
-    print url
     params = urllib.urlencode(params)
     request = urllib2.Request(url, params)
     res = urllib2.urlopen(request)
