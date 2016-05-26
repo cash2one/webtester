@@ -1,11 +1,14 @@
 import urllib
 try:
     import urllib.request as urllib2
+    from urllib.parse import urlencode
 except ImportError:
     import urllib2
+    from urllib import urlencode
+    
 
 def get_from_url(url, params):
-    params = urllib.urlencode(params)
+    params = urlencode(params)
     res = urllib.urlopen("%s?%s" % (url, params))
     if res.getcode() == 200:
         page = res.read()
@@ -15,7 +18,7 @@ def get_from_url(url, params):
 
 
 def post_to_url(url, params):
-    params = urllib.urlencode(params)
+    params = urlencode(params).encode('utf8')
     request = urllib2.Request(url, params)
     res = urllib2.urlopen(request)
     if res.getcode() == 200:
