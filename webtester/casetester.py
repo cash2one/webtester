@@ -142,7 +142,7 @@ class CaseTester:
                 except:
                     print('fail on exception')
                     traceback.print_exc()
-                    report.update({'result': False, 'result_content': traceback.format_exc()})
+                    report.update({'result': 'fail', 'result_content': traceback.format_exc()})
                     continue
                 finally:
                     # self.driver.refresh()
