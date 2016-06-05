@@ -5,3 +5,10 @@ node_modules
 migrations
 webtester/settings.py
 static/admin
+bin
+include
+lib
+lib64
+*out
+selenium
+*json

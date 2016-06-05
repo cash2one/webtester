@@ -4,7 +4,11 @@ from __future__ import print_function
 from selenium import webdriver
 from time import *
 import traceback
-import win32api
+try:
+	import win32api
+	no_win32=False
+except:
+	no_win32=True
 from random import Random
 import re
 import json
@@ -162,6 +166,8 @@ class CaseTester:
 
     @staticmethod
     def __change_resolution(resolution_width, resolution_height):
+	if no_win32:
+		return
         dm = win32api.EnumDisplaySettings(None, 0)
         dm.PelsHeight = resolution_height
         dm.PelsWidth = resolution_width
