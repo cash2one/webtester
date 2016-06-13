@@ -386,7 +386,12 @@ iframePage.load(
                 var xpathString = createXPathFromElement(elements, this);
                 makeEleRedBorder(xpathString);
                 xpathInput.val(xpathString);
-                if (this.hasAttribute('href')&&!eventDisable) {
+                if(eventDisable){
+                    event.preventDefault();// 取消事件的默认行为
+                    event.stopPropagation(); // 阻止事件的传播
+                    return;
+                }
+                if (this.hasAttribute('href')) {
                     event.preventDefault();// 取消事件的默认行为
                     cookie_list = cookieInput.val();
                     var newUrl = this.getAttribute('href');
