@@ -352,7 +352,7 @@ submitBtn.click(
     function () {
         console.log(JSON.stringify({name: postNameInput.val(), caseList: caseList}));
         $.post('/add_post',
-            {test_post: JSON.stringify({caseList: caseList})},
+            {name:postNameInput.val(),test_post: JSON.stringify({name: postNameInput.val(),caseList: caseList})},
             function (data) {
                 //noinspection JSUnresolvedVariable
                 if (data.errno == 0) {
