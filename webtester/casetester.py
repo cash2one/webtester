@@ -166,8 +166,8 @@ class CaseTester:
 
     @staticmethod
     def __change_resolution(resolution_width, resolution_height):
-	if no_win32:
-		return
+        if no_win32:
+                return
         dm = win32api.EnumDisplaySettings(None, 0)
         dm.PelsHeight = resolution_height
         dm.PelsWidth = resolution_width

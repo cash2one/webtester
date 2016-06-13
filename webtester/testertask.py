@@ -17,7 +17,7 @@ def test_testpost(test_post):
     logger.info('test receive ' + test_post)
     cases = cases_json['caseList']
     tester = CaseTester()
-    report_id_list = []
+    #report_id_list = []
     post_to_url('http://%s:%d%s' % (WEB_MATER_HOST, WEB_MASTER_PORT, NOTIFY_TEST_POST_STATUS_API),
                 {'post_id': cases_json['postId'], 'status': 'Task Exec'})
     has_error = False
@@ -27,8 +27,8 @@ def test_testpost(test_post):
         try:
             report_list = tester.do_test()
             data = {'report_list': json.dumps(report_list)}
-            res = post_to_url('http://%s:%d%s' % (WEB_MATER_HOST, WEB_MASTER_PORT, ADD_REPORT_LIST_API), data)
-            report_id_list.append(json.loads(res))
+            re = post_to_url('http://%s:%d%s' % (WEB_MATER_HOST, WEB_MASTER_PORT, ADD_REPORT_LIST_API), data)
+            logger.debug('notify task re:' + str(re))
         except:
             log += '\n' + traceback.format_exc()
             traceback.print_exc()
@@ -40,12 +40,12 @@ def test_testpost(test_post):
             re = post_to_url('http://%s:%d%s' % (WEB_MATER_HOST, WEB_MASTER_PORT, NOTIFY_TEST_POST_STATUS_API),
                              {'post_id': cases_json['postId'], 'status': 'Task Complate With Exception',
                               'log': log})
-            logger.debug('notify task re:' + re)
+            logger.debug('notify task re:' + str(re))
         else:
             logger.info('test success \n' + str(cases_json['postId']))
             re = post_to_url('http://%s:%d%s' % (WEB_MATER_HOST, WEB_MASTER_PORT, NOTIFY_TEST_POST_STATUS_API),
                              {'post_id': cases_json['postId'], 'status': 'Task Success'})
-            logger.debug('notify task re:' + re)
+            logger.debug('notify task re:' + str(re))
     except:
         traceback.print_exc()
         logger.info('notify task post exception')
