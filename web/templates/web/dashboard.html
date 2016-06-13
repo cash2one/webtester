@@ -76,27 +76,37 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="col-lg-6">
-            <div class="row-lg-2">
+            <div class="row">
                 <span class="label label-primary">Post Name</span>
                 <div class="input-group">
                     <span class="input-group-addon" id="sizing-addon1">Name</span>
-                    <input type="text" class="form-control" placeholder="Input URL to load page" id="postNameInput" aria-describedby="sizing-addon1">
+                    <input type="text" class="form-control" placeholder="Post Name" id="postNameInput"
+                           aria-describedby="sizing-addon1">
                 </div><!-- /input-group -->
             </div>
-            <div class="row-lg-2">
+            <div class="row">
                 <span class="label label-primary">URL</span>
                 <div class="input-group">
                     <span class="input-group-addon" id="sizing-addon2">URL</span>
-                    <input type="text" class="form-control" placeholder="Input URL to load page" id="urlInput" aria-describedby="sizing-addon2">
-                    <span class="input-group-btn"><button class="btn btn-default" type="button" id="urlBtn">Go!</button></span>
+                    <input type="text" class="form-control" placeholder="Input URL to load page" id="urlInput"
+                           aria-describedby="sizing-addon2">
                 </div><!-- /input-group -->
             </div>
-            <div class="row-lg-2">
+            <div class="row">
                 <span class="label label-primary">Cookie</span>
                 <div class="input-group">
                     <span class="input-group-addon" id="sizing-addon3">Cookie</span>
-                    <input type="text" class="form-control" placeholder="Input Cookie String" id="cookieInput" aria-describedby="sizing-addon3">
+                    <input type="text" class="form-control" placeholder="Input Cookie String" id="cookieInput"
+                           aria-describedby="sizing-addon3">
                 </div><!-- /input-group -->
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <button class="btn btn-md btn-primary btn-block" type="button" id="urlBtn">Load Page in Frame</button>
+                </div>
+                <div class="col-lg-6">
+                    <button class="btn btn-md btn-primary btn-block" type="button" id="eventBtn">Enable Event</button>
+                </div>
             </div>
             <div class="row-lg-6" style="min-height: 600px">
                 <span class="label label-primary">Page</span>
