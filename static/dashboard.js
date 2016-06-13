@@ -3,6 +3,7 @@ var addActionBtn = $('#addActionBtn');
 var addCheckBtn = $('#addCheckBtn');
 var addCaseBtn = $('#addCaseBtn');
 var submitBtn = $('#submitBtn');
+var eventBtn=$('#eventBtn');
 
 var urlInput = $('#urlInput');
 var postNameInput = $('#postNameInput');
@@ -39,6 +40,12 @@ var currentCheck = {};
 var url = undefined;
 var oldElemList = [];
 var cookie_list = undefined;
+var eventDisable=false;
+
+var eventText={
+    false:'Disable Event',
+    true:'Enable Event'
+}
 
 urlBtn.click(function () {
     url = urlInput.val();
@@ -46,6 +53,12 @@ urlBtn.click(function () {
     $('#formUrl').val(url);
     $('#formCookie').val(cookie_list);
     $('#hiddenForm').submit();
+});
+
+
+eventBtn.click(function () {
+    eventDisable=!eventDisable;
+    eventBtn.text(eventText[eventDisable]);
 });
 
 actionXpathInput.click(
@@ -373,7 +386,7 @@ iframePage.load(
                 var xpathString = createXPathFromElement(elements, this);
                 makeEleRedBorder(xpathString);
                 xpathInput.val(xpathString);
-                if (this.hasAttribute('href')) {
+                if (this.hasAttribute('href')&&!eventDisable) {
                     event.preventDefault();// 取消事件的默认行为
                     cookie_list = cookieInput.val();
                     var newUrl = this.getAttribute('href');
